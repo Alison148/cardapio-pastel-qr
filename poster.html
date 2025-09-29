@@ -209,7 +209,7 @@
         const text = lines.join('\n');
 
         // Abre WhatsApp
-        const phone = (CONFIG?.phone || '').replace(/[^\d]/g, '');
+        const phone = "5511957805217"; 
         const base = phone ? `https://wa.me/${phone}` : `https://wa.me/`;
         const url = `${base}?text=${encodeURIComponent(text)}`;
 
