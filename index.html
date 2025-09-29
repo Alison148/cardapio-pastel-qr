@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cardápio – Pastéis, Bebidas, Cervejas & Espetinhos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Cardápio de Pastéis, Bebidas, Cervejas e Espetinhos – HelpTech Antunes">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🥟</div>
+      <div>
+        <h1 id="shopName">Cardápio</h1>
+        <small id="address"></small>
+      </div>
+    </div>
+    <a class="btn outline" href="poster.html" target="_blank" title="Cartaz com QR (imprimir)">Cartaz QR</a>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h2>Escolha e peça pelo WhatsApp</h2>
+      <p>Toque nos itens para adicionar ao carrinho. Depois clique em “Fechar pedido”.</p>
+
+      <div class="searchbar">
+        <input id="searchInput" type="search" placeholder="Buscar no cardápio..." />
+      </div>
+
+      <div class="filters">
+        <button class="chip active" data-filter="todos">Todos</button>
+        <button class="chip" data-filter="pastel">Pastéis</button>
+        <button class="chip" data-filter="bebida">Bebidas</button>
+        <button class="chip" data-filter="cerveja">Cervejas</button>
+        <button class="chip" data-filter="espetinho">Espetinhos</button>
+        <button class="chip" data-filter="promo">Promoções</button>
+      </div>
+    </section>
+
+    <section id="menuGrid" class="grid"></section>
+  </main>
+
+  <footer class="footer">
+    <div class="cart">
+      <div class="cart-info">
+        <strong>Itens:</strong> <span id="cartCount">0</span>
+        <strong>Total:</strong> <span id="cartTotal">R$ 0,00</span>
+      </div>
+      <div class="actions">
+        <button id="clearBtn" class="btn ghost">Limpar</button>
+        <a id="checkoutBtn" class="btn">Fechar pedido</a>
+      </div>
+    </div>
+    <p class="copy">© <span id="year"></span> <span id="shopName2"></span>. Feito com ❤️.</p>
+  </footer>
+
+  <script type="module" src="config.js"></script>
+  <script type="module" src="script.js"></script>
+</body>
+</html>

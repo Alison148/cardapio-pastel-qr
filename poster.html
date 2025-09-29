@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cartaz QR – Cardápio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{ --green:#09a66b; --dark:#0b7c55; --muted:#6b7280 }
+    *{box-sizing:border-box}
+    body{margin:0;padding:24px;font-family:'Poppins',system-ui;background:#fff;color:#111}
+    .poster{max-width:900px;margin:0 auto;border:3px solid var(--green);padding:28px;border-radius:18px}
+    .headline{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    .icons{font-size:34px;line-height:1}
+    h1{margin:0 0 6px 0;font-size:28px}
+    .addr{margin:0 0 14px 0;color:var(--muted);font-size:14px}
+    .row{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+    .qr{width:340px;height:340px;border-radius:16px;border:2px dashed #b6f0d7;display:grid;place-items:center;overflow:hidden}
+    .qr img{display:block;width:340px;height:340px}
+    .info{flex:1;min-width:280px}
+    .tag{display:inline-block;background:#eafff6;border:1px dashed #b6f0d7;color:var(--dark);padding:6px 12px;border-radius:999px;margin-bottom:10px;font-weight:600}
+    .muted{color:var(--muted)}
+    ol{padding-left:18px;margin:8px 0 0 0}
+    .cta{margin-top:12px;font-size:18px}
+    .whats{font-size:20px;font-weight:700;color:#111}
+    .btn{display:inline-block;margin-top:14px;padding:10px 16px;border-radius:12px;border:1px solid var(--green);color:#fff;background:var(--green);text-decoration:none}
+    .btn.outline{background:transparent;color:var(--green)}
+    .footer{margin-top:16px;font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    @media print{
+      .btn{display:none}
+      body{padding:0}
+      .poster{border-width:0;padding:20mm}
+      .footer{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="poster">
+    <div class="headline">
+      <div class="icons" aria-hidden="true">🥟🍺🍢</div>
+      <div>
+        <span class="tag">Escaneie e peça!</span>
+        <h1 id="title">Cardápio – Pastéis, Bebidas, Cervejas & Espetinhos</h1>
+        <p id="address" class="addr"></p>
+      </div>
+    </div>
+
+    <div class="row">
+      <figure class="qr" aria-label="QR Code para abrir o cardápio">
+        <img id="qr" alt="QR code do cardápio" width="340" height="340" loading="eager"/>
+      </figure>
+
+      <div class="info">
+        <h2 style="margin:0 0 6px 0">Como usar</h2>
+        <ol>
+          <li>Abra a câmera do celular.</li>
+          <li>Aponte para o QR code.</li>
+          <li>Toque no link que aparecer para abrir o cardápio.</li>
+          <li>Monte o pedido e finalize pelo WhatsApp <span id="phone" class="whats"></span>.</li>
+        </ol>
+
+        <p class="cta muted">Categorias: Pastéis • Bebidas • <strong>Cervejas</strong> • <strong>Espetinhos</strong> • Promoções</p>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn" href="index.html" target="_blank" rel="noopener">Abrir o cardápio</a>
+          <a id="waLink" class="btn outline" target="_blank" rel="noopener">Chamar no WhatsApp</a>
+        </div>
+
+        <div class="muted" style="margin-top:10px">Dica: use <kbd>Ctrl/Cmd + P</kbd> para imprimir em A4.</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>Imprima e fixe próximo ao balcão ou na fachada.</span>
+      <span>© <span id="year"></span> <span id="shopNameCopy"></span></span>
+    </div>
+  </div>
+
+  <script type="module">
+    import { CONFIG } from "./config.js";
+
+    // QR code a partir da URL do cardápio
+    const enc = encodeURIComponent(CONFIG.qrUrl);
+    const src = `https://chart.googleapis.com/chart?chs=340x340&cht=qr&chl=${enc}`;
+    document.getElementById("qr").src = src;
+
+    // Textos dinâmicos
+    const fullTitle = `${CONFIG.shopName} – Pastéis, Bebidas, Cervejas & Espetinhos`;
+    document.getElementById("title").textContent = fullTitle;
+    document.getElementById("address").textContent = CONFIG.address || "";
+    document.getElementById("phone").textContent = CONFIG.whatsappDisplay || "";
+    document.getElementById("year").textContent = new Date().getFullYear();
+    document.getElementById("shopNameCopy").textContent = CONFIG.shopName || "";
+
+    // Link direto pro WhatsApp
+    const wa = `https://wa.me/${CONFIG.phoneE164}`;
+    const waLink = document.getElementById("waLink");
+    waLink.href = wa;
+    waLink.textContent = `WhatsApp ${CONFIG.whatsappDisplay || ""}`;
+  </script>
+</body>
+</html>
