@@ -1,10 +1,9 @@
-// app.js
 import { CONFIG } from "./config.js";
 
 // Formatação de moeda
 const BRL = new Intl.NumberFormat('pt-BR',{ style:'currency', currency:'BRL' });
 
-// Seu menu (se já tiver em outro arquivo, pode remover daqui e importar)
+// Menu
 const MENU = window.MENU || [
   // Pastéis
   { id:'p1', name:'Pastel de Carne', desc:'Carne moída temperada', price:12.0, tag:'pastel' },
@@ -29,7 +28,7 @@ const MENU = window.MENU || [
   { id:'pm2', name:'Espetinho + Cerveja', desc:'1 espetinho à escolha + 1 lata', price:15.0, tag:'promo' }
 ];
 
-// DOM (bate com os IDs do seu HTML)
+// DOM
 const el = {
   shopName: document.getElementById("shopName"),
   shopName2: document.getElementById("shopName2"),
@@ -52,20 +51,14 @@ if (el.year) el.year.textContent = String(new Date().getFullYear());
 
 // --- Carrinho ---
 let cart = loadCart();
-
-// Carrega do localStorage (se existir)
 function loadCart(){
   try {
     const saved = localStorage.getItem('ht_cart');
     if (saved) {
       const parsed = JSON.parse(saved);
-      // aceita {items:[{name, qty, total}]}
       if (parsed && parsed.items && Array.isArray(parsed.items)) {
-        // reconstruir como {id:qty}? Não temos id -> guardamos como name.
-        // aqui vamos manter um mapa por id, se não tiver id vamos p/ name.
         const map = {};
         parsed.items.forEach(it=>{
-          // tenta casar pelo nome no MENU pra achar id/preço
           const m = MENU.find(x => x.name === it.name);
           if (m) map[m.id] = (map[m.id]||0) + (it.qty||1);
         });
@@ -75,8 +68,6 @@ function loadCart(){
   } catch {}
   return {};
 }
-
-// Salva em localStorage (e expõe para outros scripts)
 function persistCart(){
   const items = Object.entries(cart).map(([id, qty])=>{
     const it = MENU.find(m=>m.id===id);
@@ -86,8 +77,6 @@ function persistCart(){
   window.__CART__ = { items, total };
   try { localStorage.setItem('ht_cart', JSON.stringify(window.__CART__)); } catch {}
 }
-
-// Atualiza contadores na UI
 function updateCartUI(){
   const entries = Object.entries(cart);
   const count = entries.reduce((s, [,q]) => s+q, 0);
@@ -95,14 +84,10 @@ function updateCartUI(){
     const it = MENU.find(m => m.id===id);
     return s + (it ? it.price*q : 0);
   }, 0);
-
   if (el.cartCount) el.cartCount.textContent = count;
   if (el.cartTotal) el.cartTotal.textContent = BRL.format(total);
-
   persistCart();
 }
-
-// Adiciona / remove
 function add(id){ cart[id] = (cart[id]||0) + 1; updateCartUI(); }
 function dec(id){
   if(!cart[id]) return;
@@ -111,7 +96,7 @@ function dec(id){
   updateCartUI();
 }
 
-// --- Renderização do grid ---
+// --- Renderização ---
 function cardHTML(it){
   return `
     <article class="card">
@@ -125,13 +110,10 @@ function cardHTML(it){
     </article>
   `;
 }
-
 function renderList(list){
   if (!el.grid) return;
   el.grid.innerHTML = list.map(cardHTML).join('');
 }
-
-// Filtro/busca
 function applyFilter(){
   const q = (el.search?.value || '').trim().toLowerCase();
   const active = document.querySelector(".chip.active")?.dataset.filter ?? "todos";
@@ -142,7 +124,7 @@ function applyFilter(){
   renderList(list);
 }
 
-// Delegação de clique para botões Adicionar/– (funciona em HTML estático)
+// Delegação clique
 document.addEventListener('click', (ev)=>{
   const inc = ev.target.closest?.('[data-inc]')?.dataset.inc;
   const decId = ev.target.closest?.('[data-dec]')?.dataset.dec;
@@ -156,7 +138,7 @@ el.clearBtn?.addEventListener('click', ()=>{
   updateCartUI();
 });
 
-// Chips e busca
+// Chips/busca
 el.chips.forEach(ch => ch.addEventListener('click', ()=>{
   el.chips.forEach(x=>x.classList.remove('active'));
   ch.classList.add('active');
@@ -167,3 +149,38 @@ el.search?.addEventListener('input', applyFilter);
 // Primeira renderização
 applyFilter();
 updateCartUI();
+
+// --- Enviar pedido via WhatsApp ---
+document.getElementById("btnEnviar")?.addEventListener("click", () => {
+  const nome = document.getElementById("nome")?.value || "";
+  const endereco = document.getElementById("endereco")?.value || "";
+  const pagamento = document.getElementById("pagamento")?.value || "";
+
+  if(!nome){
+    alert("Preencha o nome antes de enviar.");
+    return;
+  }
+
+  const itens = Object.entries(cart).map(([id, qty]) => {
+    const it = MENU.find(m => m.id === id);
+    return it ? `- ${it.name} x${qty} (${BRL.format(it.price*qty)})` : "";
+  }).join("\n");
+
+  const total = Object.entries(cart).reduce((s,[id,qty])=>{
+    const it = MENU.find(m=>m.id===id);
+    return s+(it?it.price*qty:0);
+  },0);
+
+  const msg = 
+`🍴 Pedido de ${nome}
+📍 Endereço: ${endereco}
+💳 Pagamento: ${pagamento}
+
+🛒 Itens:
+${itens}
+
+Total: ${BRL.format(total)}`;
+
+  const url = `https://wa.me/${CONFIG.phone}?text=${encodeURIComponent(msg)}`;
+  window.open(url, "_blank");
+});
