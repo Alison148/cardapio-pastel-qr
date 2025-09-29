@@ -48,19 +48,23 @@ function renderMenu(filter = "todos", search = "") {
           <h3>${item.name}</h3>
           <p>${item.desc}</p>
           <strong>${BRL.format(item.price)}</strong>
-          <button onclick="addToCart(${item.id})">Adicionar</button>
+          <button class="btn-add" data-id="${item.id}">Adicionar</button>
         `;
         grid.appendChild(card);
       });
 }
 renderMenu();
 
-// Adicionar ao carrinho
-function addToCart(id) {
+// Evento de clique no grid (delegação)
+grid.addEventListener("click", (e) => {
+  const btn = e.target.closest(".btn-add");
+  if (!btn) return;
+  const id = Number(btn.dataset.id);
   const item = MENU.find(i => i.id === id);
+  if (!item) return;
   cart.push(item);
   updateCart();
-}
+});
 
 // Atualizar carrinho
 function updateCart() {
