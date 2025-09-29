@@ -43,13 +43,18 @@ const dom = {
   cartCount: document.getElementById("cartCount"),
   cartTotal: document.getElementById("cartTotal"),
   clearBtn: document.getElementById("clearBtn"),
-  checkout: document.getElementById("checkoutBtn")
+  checkout: document.getElementById("checkoutBtn"),
+  payment: document.getElementById("payment"),
+  customerName: document.getElementById("customerName"),
+  customerAddress: document.getElementById("customerAddress"),
+  shopNameFoot: document.getElementById("shopNameFoot")
 };
 
 // Init UI
 dom.shopName.textContent = CONFIG.shopName;
 dom.shopName2.textContent = CONFIG.shopName;
 dom.address.textContent = CONFIG.address;
+dom.shopNameFoot.textContent = CONFIG.shopName;
 dom.year.textContent = new Date().getFullYear();
 
 function render(items){
@@ -62,8 +67,8 @@ function render(items){
       <p>${it.desc ?? ""}</p>
       <div><span class="price">${BRL.format(it.price)}</span></div>
       <div class="actions">
-        <button class="btn ghost" data-dec="${it.id}">–</button>
-        <button class="btn" data-inc="${it.id}">Adicionar</button>
+        <button class="btn ghost" data-dec="${it.id}" aria-label="Remover 1">–</button>
+        <button class="btn" data-inc="${it.id}" aria-label="Adicionar 1">Adicionar</button>
       </div>
     `;
     dom.grid.appendChild(card);
@@ -73,7 +78,7 @@ function render(items){
 function applyFilter(){
   const q = dom.search.value.trim().toLowerCase();
   const active = document.querySelector(".chip.active")?.dataset.filter ?? "todos";
-  let items = MENU.filter(x =>
+  const items = MENU.filter(x =>
     (active==="todos" || x.tag===active) &&
     (x.name.toLowerCase().includes(q) || (x.desc||"").toLowerCase().includes(q))
   );
@@ -120,12 +125,32 @@ dom.clearBtn.addEventListener("click", ()=>{
   updateCart();
 });
 
+// Enviar para WhatsApp com nome, endereço/obs e forma de pagamento
 dom.checkout.addEventListener("click", ()=>{
   const entries = Object.entries(cart);
-  if(entries.length===0){ alert("Seu carrinho está vazio."); return; }
+  if(entries.length===0){
+    alert("Seu carrinho está vazio.");
+    return;
+  }
+
+  const nome = dom.customerName.value.trim();
+  if(!nome){
+    alert("Informe o nome do cliente para continuar.");
+    dom.customerName.focus();
+    return;
+  }
+
   let msg = `*${CONFIG.shopName}*%0A`;
-  msg += `Pedido:%0A`;
+  msg += `Cliente: ${encodeURIComponent(nome)}%0A`;
+
+  const addr = dom.customerAddress.value.trim();
+  if(addr){
+    msg += `Endereço/Obs.: ${encodeURIComponent(addr)}%0A`;
+  }
+
+  msg += `%0A*Pedido:*%0A`;
   let total = 0;
+
   for(const [id, q] of entries){
     const it = MENU.find(m => m.id===id);
     if(!it) continue;
@@ -133,11 +158,20 @@ dom.checkout.addEventListener("click", ()=>{
     total += it.price * q;
     msg += encodeURIComponent(line) + "%0A";
   }
-  msg += `%0ATotal: ${encodeURIComponent(BRL.format(total))}%0A`;
-  msg += `Entrega/Retirada? Endereço: ${encodeURIComponent(CONFIG.address)}%0A`;
+
+  msg += `%0A*Total:* ${encodeURIComponent(BRL.format(total))}%0A`;
+
+  // forma de pagamento
+  const pay = dom.payment.value;
+  msg += `Pagamento: ${encodeURIComponent(pay)}%0A`;
+
+  // pergunta final
+  msg += `%0AEntrega ou Retirada?%0A`;
+
   const url = `https://wa.me/${CONFIG.phoneE164}?text=${msg}`;
   window.open(url, "_blank");
 });
 
+// primeira renderização
 applyFilter();
 updateCart();

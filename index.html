@@ -3,62 +3,113 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cardápio – Pastéis, Bebidas, Cervejas & Espetinhos</title>
+  <title>Cardápio – QR Pastéis</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <meta name="description" content="Cardápio de Pastéis, Bebidas, Cervejas e Espetinhos – HelpTech Antunes">
+  <style>
+    :root{ --green:#09a66b; --dark:#0f172a; --muted:#6b7280; --line:#e5e7eb }
+    *{box-sizing:border-box}
+    body{margin:0;padding:24px;font-family:'Poppins',system-ui;background:#fff;color:#111}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
+    .brand h1{font-size:24px;margin:0}
+    .brand small{color:var(--muted)}
+    .searchbar{display:flex;gap:12px;flex-wrap:wrap}
+    input, select, textarea{border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit}
+    input:focus, select:focus, textarea:focus{outline:2px solid #9ae7c9}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+    .chip{border:1px solid var(--line);padding:8px 12px;border-radius:999px;cursor:pointer;font-size:14px}
+    .chip.active{background:var(--green);color:#fff;border-color:var(--green)}
+    main{display:grid;grid-template-columns:1fr 320px;gap:24px}
+    @media (max-width:900px){ main{grid-template-columns:1fr} }
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+    .card{border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px}
+    .card h3{margin:0 0 4px 0;font-size:18px}
+    .badge{background:#fff3c4;border:1px solid #facc15;color:#92400e;font-size:12px;padding:2px 6px;border-radius:8px;margin-left:6px}
+    .price{font-weight:700}
+    .actions{display:flex;gap:8px;margin-top:auto}
+    .btn{border:none;background:var(--green);color:#fff;padding:8px 12px;border-radius:10px;cursor:pointer}
+    .btn.ghost{background:#eefbf5;color:#0b5c3f;border:1px solid #b7f0d9}
+    aside{border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;position:sticky;top:16px;height:max-content}
+    .row{display:flex;gap:8px}
+    .row>div{flex:1}
+    .totals{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px dashed var(--line)}
+    footer{margin-top:24px;color:var(--muted);font-size:14px;text-align:center}
+  </style>
 </head>
 <body>
-  <header class="topbar">
+  <header>
     <div class="brand">
-      <div class="logo">🥟</div>
-      <div>
-        <h1 id="shopName">Cardápio</h1>
-        <small id="address"></small>
-      </div>
+      <h1 id="shopName">Loja</h1>
+      <small id="address">Endereço</small>
     </div>
-    <a class="btn outline" href="poster.html" target="_blank" title="Cartaz com QR (imprimir)">Cartaz QR</a>
+    <div class="searchbar">
+      <input id="searchInput" type="search" placeholder="Buscar item (ex.: queijo, refri)"/>
+    </div>
   </header>
 
-  <main class="container">
-    <section class="hero">
-      <h2>Escolha e peça pelo WhatsApp</h2>
-      <p>Toque nos itens para adicionar ao carrinho. Depois clique em “Fechar pedido”.</p>
+  <div class="chips">
+    <span class="chip active" data-filter="todos">Todos</span>
+    <span class="chip" data-filter="pastel">Pastéis</span>
+    <span class="chip" data-filter="bebida">Bebidas</span>
+    <span class="chip" data-filter="cerveja">Cervejas</span>
+    <span class="chip" data-filter="espetinho">Espetinhos</span>
+    <span class="chip" data-filter="promo">Promoções</span>
+  </div>
 
-      <div class="searchbar">
-        <input id="searchInput" type="search" placeholder="Buscar no cardápio..." />
-      </div>
-
-      <div class="filters">
-        <button class="chip active" data-filter="todos">Todos</button>
-        <button class="chip" data-filter="pastel">Pastéis</button>
-        <button class="chip" data-filter="bebida">Bebidas</button>
-        <button class="chip" data-filter="cerveja">Cervejas</button>
-        <button class="chip" data-filter="espetinho">Espetinhos</button>
-        <button class="chip" data-filter="promo">Promoções</button>
-      </div>
+  <main>
+    <section>
+      <div id="menuGrid" class="grid"></div>
     </section>
 
-    <section id="menuGrid" class="grid"></section>
+    <aside>
+      <h2 id="shopName2">Loja</h2>
+
+      <!-- Dados do cliente -->
+      <div class="row">
+        <div>
+          <label for="customerName">Nome *</label>
+          <input id="customerName" type="text" placeholder="Ex.: João Silva" required/>
+        </div>
+      </div>
+      <div>
+        <label for="customerAddress">Endereço / Observações</label>
+        <textarea id="customerAddress" rows="2" placeholder="Ex.: Entregar na Rua X, nº Y, apt Z"></textarea>
+      </div>
+
+      <!-- Pagamento -->
+      <div>
+        <label for="payment">Forma de Pagamento</label>
+        <select id="payment">
+          <option value="Dinheiro">Dinheiro</option>
+          <option value="Cartão de Débito">Cartão de Débito</option>
+          <option value="Cartão de Crédito">Cartão de Crédito</option>
+          <option value="Pix">Pix</option>
+        </select>
+      </div>
+
+      <!-- Carrinho -->
+      <div class="totals">
+        <strong>Itens: <span id="cartCount">0</span></strong>
+        <strong>Total: <span id="cartTotal">R$ 0,00</span></strong>
+      </div>
+
+      <div class="row">
+        <button id="clearBtn" class="btn ghost" type="button">Limpar</button>
+        <button id="checkoutBtn" class="btn" type="button">Enviar WhatsApp</button>
+      </div>
+
+      <small style="color:var(--muted)">Campo nome é obrigatório para enviar.</small>
+    </aside>
   </main>
 
-  <footer class="footer">
-    <div class="cart">
-      <div class="cart-info">
-        <strong>Itens:</strong> <span id="cartCount">0</span>
-        <strong>Total:</strong> <span id="cartTotal">R$ 0,00</span>
-      </div>
-      <div class="actions">
-        <button id="clearBtn" class="btn ghost">Limpar</button>
-        <a id="checkoutBtn" class="btn">Fechar pedido</a>
-      </div>
-    </div>
-    <p class="copy">© <span id="year"></span> <span id="shopName2"></span>. Feito com ❤️.</p>
+  <footer>
+    © <span id="year"></span> • <span id="shopNameFoot">HelpTech</span>
   </footer>
 
-  <script type="module" src="config.js"></script>
-  <script type="module" src="script.js"></script>
+  <!-- Config com seu número e dados da loja -->
+  <script type="module" src="./config.js"></script>
+  <!-- App -->
+  <script type="module" src="./app.js"></script>
 </body>
 </html>
