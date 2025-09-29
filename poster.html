@@ -3,220 +3,102 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cardápio – QR Pastéis</title>
+  <title>Cartaz QR – Cardápio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{ --green:#09a66b; --dark:#0f172a; --muted:#6b7280; --line:#e5e7eb }
+    :root{ --green:#09a66b; --dark:#0b7c55; --muted:#6b7280 }
     *{box-sizing:border-box}
     body{margin:0;padding:24px;font-family:'Poppins',system-ui;background:#fff;color:#111}
-    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
-    .brand h1{font-size:24px;margin:0}
-    .brand small{color:var(--muted)}
-    .searchbar{display:flex;gap:12px;flex-wrap:wrap}
-    input, select, textarea{border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit}
-    input:focus, select:focus, textarea:focus{outline:2px solid #9ae7c9}
-    .chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-    .chip{border:1px solid var(--line);padding:8px 12px;border-radius:999px;cursor:pointer;font-size:14px}
-    .chip.active{background:var(--green);color:#fff;border-color:var(--green)}
-    main{display:grid;grid-template-columns:1fr 320px;gap:24px}
-    @media (max-width:900px){ main{grid-template-columns:1fr} }
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-    .card{border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px}
-    .card h3{margin:0 0 4px 0;font-size:18px}
-    .badge{background:#fff3c4;border:1px solid #facc15;color:#92400e;font-size:12px;padding:2px 6px;border-radius:8px;margin-left:6px}
-    .price{font-weight:700}
-    .actions{display:flex;gap:8px;margin-top:auto}
-    .btn{border:none;background:var(--green);color:#fff;padding:8px 12px;border-radius:10px;cursor:pointer}
-    .btn.ghost{background:#eefbf5;color:#0b5c3f;border:1px solid #b7f0d9}
-    aside{border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;position:sticky;top:16px;height:max-content}
-    .row{display:flex;gap:8px}
-    .row>div{flex:1}
-    .totals{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px dashed var(--line)}
-    footer{margin-top:24px;color:var(--muted);font-size:14px;text-align:center}
+    .poster{max-width:900px;margin:0 auto;border:3px solid var(--green);padding:28px;border-radius:18px}
+    .headline{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    .icons{font-size:34px;line-height:1}
+    h1{margin:0 0 6px 0;font-size:28px}
+    .addr{margin:0 0 14px 0;color:var(--muted);font-size:14px}
+    .row{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+    .qr{width:340px;height:340px;border-radius:16px;border:2px dashed #b6f0d7;display:grid;place-items:center;overflow:hidden}
+    .qr img{display:block;width:340px;height:340px}
+    .info{flex:1;min-width:280px}
+    .tag{display:inline-block;background:#eafff6;border:1px dashed #b6f0d7;color:var(--dark);padding:6px 12px;border-radius:999px;margin-bottom:10px;font-weight:600}
+    .muted{color:var(--muted)}
+    ol{padding-left:18px;margin:8px 0 0 0}
+    .cta{margin-top:12px;font-size:18px}
+    .whats{font-size:20px;font-weight:700;color:#111}
+    .btn{display:inline-block;margin-top:14px;padding:10px 16px;border-radius:12px;border:1px solid var(--green);color:#fff;background:var(--green);text-decoration:none}
+    .btn.outline{background:transparent;color:var(--green)}
+    .footer{margin-top:16px;font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    @media print{
+      .btn{display:none}
+      body{padding:0}
+      .poster{border-width:0;padding:20mm}
+      .footer{display:none}
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="brand">
-      <h1 id="shopName">Loja</h1>
-      <small id="address">Endereço</small>
+  <div class="poster">
+    <div class="headline">
+      <div class="icons" aria-hidden="true">🥟🍺🍢</div>
+      <div>
+        <span class="tag">Escaneie e peça!</span>
+        <h1 id="title">Cardápio – Pastéis, Bebidas, Cervejas & Espetinhos</h1>
+        <p id="address" class="addr"></p>
+      </div>
     </div>
-    <div class="searchbar">
-      <input id="searchInput" type="search" placeholder="Buscar item (ex.: queijo, refri)"/>
-    </div>
-  </header>
 
-  <div class="chips">
-    <span class="chip active" data-filter="todos">Todos</span>
-    <span class="chip" data-filter="pastel">Pastéis</span>
-    <span class="chip" data-filter="bebida">Bebidas</span>
-    <span class="chip" data-filter="cerveja">Cervejas</span>
-    <span class="chip" data-filter="espetinho">Espetinhos</span>
-    <span class="chip" data-filter="promo">Promoções</span>
+    <div class="row">
+      <figure class="qr" aria-label="QR Code para abrir o cardápio">
+        <img id="qr" alt="QR code do cardápio" width="340" height="340" loading="eager"/>
+      </figure>
+
+      <div class="info">
+        <h2 style="margin:0 0 6px 0">Como usar</h2>
+        <ol>
+          <li>Abra a câmera do celular.</li>
+          <li>Aponte para o QR code.</li>
+          <li>Toque no link que aparecer para abrir o cardápio.</li>
+          <li>Monte o pedido e finalize pelo WhatsApp <span id="phone" class="whats"></span>.</li>
+        </ol>
+
+        <p class="cta muted">Categorias: Pastéis • Bebidas • <strong>Cervejas</strong> • <strong>Espetinhos</strong> • Promoções</p>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn" href="index.html" target="_blank" rel="noopener">Abrir o cardápio</a>
+          <a id="waLink" class="btn outline" target="_blank" rel="noopener">Chamar no WhatsApp</a>
+        </div>
+
+        <div class="muted" style="margin-top:10px">Dica: use <kbd>Ctrl/Cmd + P</kbd> para imprimir em A4.</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>Imprima e fixe próximo ao balcão ou na fachada.</span>
+      <span>© <span id="year"></span> <span id="shopNameCopy"></span></span>
+    </div>
   </div>
 
-  <main>
-    <section>
-      <div id="menuGrid" class="grid"></div>
-    </section>
-
-    <aside>
-      <h2 id="shopName2">Loja</h2>
-
-      <!-- Dados do cliente -->
-      <div class="row">
-        <div>
-          <label for="customerName">Nome *</label>
-          <input id="customerName" type="text" placeholder="Ex.: João Silva" required/>
-        </div>
-      </div>
-      <div>
-        <label for="customerAddress">Endereço / Observações</label>
-        <textarea id="customerAddress" rows="2" placeholder="Ex.: Entregar na Rua X, nº Y, apt Z"></textarea>
-      </div>
-
-      <!-- Pagamento -->
-      <div>
-        <label for="payment">Forma de Pagamento</label>
-        <select id="payment">
-          <option value="Dinheiro">Dinheiro</option>
-          <option value="Cartão de Débito">Cartão de Débito</option>
-          <option value="Cartão de Crédito">Cartão de Crédito</option>
-          <option value="Pix">Pix</option>
-        </select>
-      </div>
-
-      <!-- Carrinho -->
-      <div class="totals">
-        <strong>Itens: <span id="cartCount">0</span></strong>
-        <strong>Total: <span id="cartTotal">R$ 0,00</span></strong>
-      </div>
-
-      <div class="row">
-        <button id="clearBtn" class="btn ghost" type="button">Limpar</button>
-        <button id="checkoutBtn" class="btn" type="button">Enviar WhatsApp</button>
-      </div>
-
-      <small style="color:var(--muted)">Campo nome é obrigatório para enviar.</small>
-    </aside>
-  </main>
-
-  <footer>
-    © <span id="year"></span> • <span id="shopNameFoot">HelpTech</span>
-  </footer>
-
-  <!-- Config com seu número e dados da loja -->
-  <script type="module" src="./config.js"></script>
-  <!-- App -->
-  <script type="module" src="./app.js"></script>
-
-  <!-- ADIÇÃO: anexa Nome/Endereço/Pagamento ao WhatsApp (não altera sua estrutura) -->
   <script type="module">
     import { CONFIG } from "./config.js";
 
-    (function () {
-      const btn = document.getElementById('checkoutBtn');
-      if (!btn) return;
+    // QR code a partir da URL do cardápio
+    const enc = encodeURIComponent(CONFIG.qrUrl);
+    const src = `https://chart.googleapis.com/chart?chs=340x340&cht=qr&chl=${enc}`;
+    document.getElementById("qr").src = src;
 
-      function getText(el) { return (el?.textContent || '').trim(); }
+    // Textos dinâmicos
+    const fullTitle = `${CONFIG.shopName} – Pastéis, Bebidas, Cervejas & Espetinhos`;
+    document.getElementById("title").textContent = fullTitle;
+    document.getElementById("address").textContent = CONFIG.address || "";
+    document.getElementById("phone").textContent = CONFIG.whatsappDisplay || "";
+    document.getElementById("year").textContent = new Date().getFullYear();
+    document.getElementById("shopNameCopy").textContent = CONFIG.shopName || "";
 
-      function tryParseJSON(str) {
-        try { return JSON.parse(str); } catch { return null; }
-      }
-
-      function getCartFromKnownPlaces() {
-        // 1) Objetos globais comuns
-        const globals = [window.__CART__, window.CART, window.cart];
-        for (const g of globals) {
-          if (!g) continue;
-          const arr = Array.isArray(g) ? g : (Array.isArray(g.items) ? g.items : null);
-          if (arr) return arr;
-        }
-
-        // 2) LocalStorage – chaves prováveis
-        const keys = ['ht_cart', 'cart', 'menu_cart', 'helptech_cart', 'app_cart'];
-        for (const k of keys) {
-          const raw = localStorage.getItem(k);
-          if (!raw) continue;
-          const parsed = tryParseJSON(raw);
-          if (!parsed) continue;
-
-          if (Array.isArray(parsed)) return parsed;
-          if (Array.isArray(parsed?.items)) return parsed.items;
-          if (Array.isArray(parsed?.data)) return parsed.data;
-        }
-
-        return null;
-      }
-
-      function formatBRL(numLike) {
-        const n = typeof numLike === 'number'
-          ? numLike
-          : Number(String(numLike).replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.'));
-        if (Number.isFinite(n)) {
-          return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(n);
-        }
-        return String(numLike);
-      }
-
-      btn.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-
-        const name = document.getElementById('customerName')?.value?.trim() || '';
-        if (!name) {
-          alert('Informe seu nome para continuar.');
-          return;
-        }
-        const address = document.getElementById('customerAddress')?.value?.trim() || '';
-        const payment = document.getElementById('payment')?.value || 'Dinheiro';
-
-        const shop = getText(document.getElementById('shopName2')) || getText(document.getElementById('shopName')) || 'Pedido';
-        const count = getText(document.getElementById('cartCount')) || '';
-        const total = getText(document.getElementById('cartTotal')) || '';
-
-        // Tenta recuperar itens detalhados do carrinho
-        const items = getCartFromKnownPlaces();
-
-        let lines = [];
-        lines.push(`*${shop}*`);
-        lines.push(``);
-        lines.push(`— *Meu pedido* —`);
-
-        if (items && items.length) {
-          // Formatos esperados: { name/nome/title/titulo/descricao/desc, qty/qtd/quantidade, price/preco, total/subtotal }
-          items.forEach((it, idx) => {
-            const nameKey = it.name || it.nome || it.title || it.titulo || it.descricao || it.desc || `Item ${idx+1}`;
-            const qtyKey  = it.qty ?? it.quantidade ?? it.qtd ?? 1;
-            const subKey  = it.total ?? it.subtotal ?? (typeof it.price !== 'undefined' ? (it.price * (qtyKey || 1)) : undefined);
-            const priceStr = typeof subKey !== 'undefined' ? ` – ${formatBRL(subKey)}` : '';
-            lines.push(`• ${nameKey} x${qtyKey}${priceStr}`);
-          });
-        } else {
-          if (count) lines.push(`Itens: ${count}`);
-        }
-
-        if (total) lines.push(`*Total:* ${total}`);
-
-        lines.push(``);
-        lines.push(`— *Dados do cliente* —`);
-        lines.push(`Nome: ${name}`);
-        if (address) lines.push(`Endereço/Obs.: ${address}`);
-        lines.push(`Pagamento: ${payment}`);
-
-        const text = lines.join('\n');
-
-        // Abre WhatsApp
-        const phone = (CONFIG?.phone || '').replace(/[^\d]/g, '');
-        const base = phone ? `https://wa.me/${phone}` : `https://wa.me/`;
-        const url = `${base}?text=${encodeURIComponent(text)}`;
-
-        window.location.href = url;
-      }, { capture: true });
-    })();
+    // Link direto pro WhatsApp
+    const wa = `https://wa.me/${CONFIG.phoneE164}`;
+    const waLink = document.getElementById("waLink");
+    waLink.href = wa;
+    waLink.textContent = `WhatsApp ${CONFIG.whatsappDisplay || ""}`;
   </script>
-  <!-- FIM ADIÇÃO -->
 </body>
 </html>
