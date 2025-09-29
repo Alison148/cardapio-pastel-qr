@@ -63,8 +63,8 @@
         <strong>Total:</strong> <span id="cartTotal">R$ 0,00</span>
       </div>
       <div class="actions">
-        <button id="clearBtn" class="btn ghost">Limpar</button>
-        <a id="checkoutBtn" class="btn">Fechar pedido</a>
+        <!-- Botão InfinitePay no lugar do antigo -->
+        <button id="checkoutBtn" class="btn">Finalizar Pedido</button>
       </div>
     </div>
     <p class="copy">© <span id="year"></span> <span id="shopName2"></span>. Feito com ❤️.</p>
@@ -72,6 +72,13 @@
 
   <script type="module" src="config.js"></script>
   <script type="module" src="script.js"></script>
+
+  <!-- Script do InfinitePay -->
+  <script>
+    const LINK_INFINITEPAY = "https://pay.infinitepay.io/alison_antunes_miranda_/VC1DLTAtUg-6OlOe3iSut-12,00";
+    document.getElementById("checkoutBtn").addEventListener("click", () => {
+      window.open(LINK_INFINITEPAY, "_blank");
+    });
+  </script>
 </body>
 </html>
-
