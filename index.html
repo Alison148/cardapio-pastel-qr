@@ -1,21 +1,37 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cardápio Digital</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cardápio – Pastéis, Bebidas, Cervejas & Espetinhos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Cardápio de Pastéis, Bebidas, Cervejas e Espetinhos – HelpTech Antunes">
 </head>
 <body>
-  <header>
-    <h1 id="shopName">Loja</h1>
-    <p id="address"></p>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🥟</div>
+      <div>
+        <h1 id="shopName">Cardápio</h1>
+        <small id="address"></small>
+      </div>
+    </div>
+    <a class="btn outline" href="poster.html" target="_blank" title="Cartaz com QR (imprimir)">Cartaz QR</a>
   </header>
 
-  <main>
-    <section>
-      <input type="text" id="searchInput" placeholder="Buscar...">
-      <div class="chips">
+  <main class="container">
+    <section class="hero">
+      <h2>Escolha e peça pelo WhatsApp</h2>
+      <p>Toque nos itens para adicionar ao carrinho. Depois clique em “Fechar pedido”.</p>
+
+      <div class="searchbar">
+        <input id="searchInput" type="search" placeholder="Buscar no cardápio..." />
+      </div>
+
+      <div class="filters">
         <button class="chip active" data-filter="todos">Todos</button>
         <button class="chip" data-filter="pastel">Pastéis</button>
         <button class="chip" data-filter="bebida">Bebidas</button>
@@ -26,30 +42,112 @@
     </section>
 
     <section id="menuGrid" class="grid"></section>
-
-    <section id="cart">
-      <h2>Carrinho (<span id="cartCount">0</span> itens)</h2>
-      <p>Total: <span id="cartTotal">R$0,00</span></p>
-      <button id="clearBtn">Limpar Carrinho</button>
-    </section>
-
-    <section id="checkout">
-      <h2>Finalizar Pedido</h2>
-      <input type="text" id="nome" placeholder="Seu nome" required>
-      <input type="text" id="endereco" placeholder="Endereço de entrega">
-      <select id="pagamento">
-        <option>Pix</option>
-        <option>Cartão</option>
-        <option>Dinheiro</option>
-      </select>
-      <button id="btnEnviar">Enviar pelo WhatsApp</button>
-    </section>
   </main>
 
-  <footer>
-    <p>&copy; <span id="year"></span> <span id="shopName2"></span></p>
+  <footer class="footer">
+    <div class="cart">
+      <div class="cart-info">
+        <strong>Itens:</strong> <span id="cartCount">0</span>
+        <strong>Total:</strong> <span id="cartTotal">R$ 0,00</span>
+      </div>
+      <div class="actions">
+        <button id="clearBtn" class="btn ghost">Limpar</button>
+        <a id="checkoutBtn" class="btn">Fechar pedido</a>
+      </div>
+    </div>
+    <p class="copy">© <span id="year"></span> <span id="shopName2"></span>. Feito com ❤️.</p>
   </footer>
 
+  <!-- ADIÇÃO: Modal para dados do cliente -->
+  <dialog id="checkoutModal" style="border:none;border-radius:16px;max-width:480px;width:90%;padding:0">
+    <form method="dialog" id="checkoutForm" style="padding:18px;display:flex;flex-direction:column;gap:12px;font-family:'Poppins',system-ui">
+      <h3 style="margin:0 0 4px 0">Finalize seu pedido</h3>
+      <p style="margin:0;color:#6b7280">Preencha seus dados para anexar no WhatsApp.</p>
+
+      <label style="display:flex;flex-direction:column;gap:6px">
+        <span>Nome *</span>
+        <input id="custName" type="text" required placeholder="Ex.: João Silva" style="padding:10px;border:1px solid #e5e7eb;border-radius:12px;font:inherit">
+      </label>
+
+      <label style="display:flex;flex-direction:column;gap:6px">
+        <span>Endereço / Observações</span>
+        <textarea id="custAddr" rows="2" placeholder="Rua, nº, complemento..." style="padding:10px;border:1px solid #e5e7eb;border-radius:12px;font:inherit"></textarea>
+      </label>
+
+      <label style="display:flex;flex-direction:column;gap:6px">
+        <span>Forma de pagamento</span>
+        <select id="custPay" style="padding:10px;border:1px solid #e5e7eb;border-radius:12px;font:inherit">
+          <option value="Dinheiro">Dinheiro</option>
+          <option value="Cartão de Débito">Cartão de Débito</option>
+          <option value="Cartão de Crédito">Cartão de Crédito</option>
+          <option value="Pix">Pix</option>
+        </select>
+      </label>
+
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px">
+        <button value="cancel" class="btn ghost" style="border:1px solid #e5e7eb;background:#fff;color:#111;padding:10px 14px;border-radius:10px;cursor:pointer">Cancelar</button>
+        <button id="confirmCheckout" value="default" class="btn" style="background:#09a66b;color:#fff;border:none;padding:10px 14px;border-radius:10px;cursor:pointer">Enviar no WhatsApp</button>
+      </div>
+    </form>
+  </dialog>
+  <!-- FIM ADIÇÃO -->
+
+  <script type="module" src="config.js"></script>
   <script type="module" src="script.js"></script>
+
+  <!-- ADIÇÃO: Script leve que só ANEXA os dados ao texto do WhatsApp (preserva sua lógica) -->
+  <script>
+    (function(){
+      const modal = document.getElementById('checkoutModal');
+      const btn   = document.getElementById('checkoutBtn');
+      const form  = document.getElementById('checkoutForm');
+      const ok    = document.getElementById('confirmCheckout');
+
+      if(!modal || !btn || !form || !ok) return;
+
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        if(typeof modal.showModal === 'function'){ modal.showModal(); }
+        else { modal.setAttribute('open','open'); }
+      });
+
+      ok.addEventListener('click', function(e){
+        const name = document.getElementById('custName').value.trim();
+        if(!name){
+          e.preventDefault();
+          alert('Informe seu nome para continuar.');
+          return;
+        }
+        const addr = document.getElementById('custAddr').value.trim();
+        const pay  = document.getElementById('custPay').value;
+
+        const btn = document.getElementById('checkoutBtn');
+        const currentHref = btn.getAttribute('href') || '';
+        if(!currentHref){
+          modal.close?.();
+          return;
+        }
+
+        const extra =
+          `\n\n— Dados do cliente —\n`+
+          `Nome: ${name}\n`+
+          (addr ? `Endereço/Obs.: ${addr}\n` : ``)+
+          `Pagamento: ${pay}`;
+
+        try {
+          const url = new URL(currentHref);
+          const text = url.searchParams.get('text') || '';
+          url.searchParams.set('text', text + extra);
+          window.location.href = url.toString();
+        } catch {
+          const join = currentHref.includes('?') ? '&' : '?';
+          const url = currentHref + join + 'text=' + encodeURIComponent(extra);
+          window.location.href = url;
+        }
+        modal.close?.();
+      });
+    })();
+  </script>
+  <!-- FIM ADIÇÃO -->
 </body>
 </html>
