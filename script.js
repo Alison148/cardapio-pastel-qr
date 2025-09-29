@@ -1,186 +1,112 @@
-import { CONFIG } from "./config.js";
-
-// Formatação de moeda
-const BRL = new Intl.NumberFormat('pt-BR',{ style:'currency', currency:'BRL' });
-
-// Menu
-const MENU = window.MENU || [
-  // Pastéis
-  { id:'p1', name:'Pastel de Carne', desc:'Carne moída temperada', price:12.0, tag:'pastel' },
-  { id:'p2', name:'Pastel de Queijo', desc:'Mussarela derretida', price:11.0, tag:'pastel' },
-  { id:'p3', name:'Frango c/ Catupiry', desc:'Frango desfiado + requeijão', price:14.0, tag:'pastel' },
-  { id:'p4', name:'Pizza', desc:'Mussarela, presunto, tomate, orégano', price:13.0, tag:'pastel' },
-  { id:'p5', name:'Calabresa c/ Queijo', desc:'Calabresa fatiada + mussarela', price:13.0, tag:'pastel' },
-  // Bebidas
-  { id:'b1', name:'Refrigerante Lata', desc:'Coca, Guaraná, Fanta...', price:6.0, tag:'bebida' },
-  { id:'b2', name:'Suco Natural 300ml', desc:'Laranja, limão, maracujá, abacaxi', price:8.0, tag:'bebida' },
-  { id:'b3', name:'Água', desc:'C/ ou s/ gás', price:4.0, tag:'bebida' },
-  // Cervejas
-  { id:'c1', name:'Cerveja Lata', desc:'Skol, Brahma, Itaipava...', price:7.0, tag:'cerveja' },
-  { id:'c2', name:'Cerveja Long Neck', desc:'Heineken, Budweiser...', price:10.0, tag:'cerveja' },
-  // Espetinhos
-  { id:'e1', name:'Espetinho de Carne', desc:'Carne bovina temperada no espeto', price:9.0, tag:'espetinho' },
-  { id:'e2', name:'Espetinho de Frango', desc:'Frango temperado no espeto', price:8.0, tag:'espetinho' },
-  { id:'e3', name:'Espetinho de Linguiça', desc:'Linguiça toscana no espeto', price:8.0, tag:'espetinho' },
-  { id:'e4', name:'Espetinho Misto', desc:'Carne + Frango + Linguiça', price:12.0, tag:'espetinho' },
-  // Promoções
-  { id:'pm1', name:'Combo 2 Pastéis + Refri', desc:'Qualquer 2 + 1 lata', price:28.0, tag:'promo' },
-  { id:'pm2', name:'Espetinho + Cerveja', desc:'1 espetinho à escolha + 1 lata', price:15.0, tag:'promo' }
-];
-
-// DOM
-const el = {
-  shopName: document.getElementById("shopName"),
-  shopName2: document.getElementById("shopName2"),
-  address: document.getElementById("address"),
-  year: document.getElementById("year"),
-  grid: document.getElementById("menuGrid"),
-  search: document.getElementById("searchInput"),
-  chips: [...document.querySelectorAll(".chip")],
-  cartCount: document.getElementById("cartCount"),
-  cartTotal: document.getElementById("cartTotal"),
-  clearBtn: document.getElementById("clearBtn"),
-  checkout: document.getElementById("checkoutBtn"),
+// Config loja
+const CONFIG = {
+  shopName: "Pastelaria Antunes",
+  address: "Rua Central, 123 - Jundiaí/SP",
+  phone: "5511957805217" // formato DDI + DDD + número
 };
 
-// Header/rodapé
-if (el.shopName) el.shopName.textContent = CONFIG.shopName || 'Loja';
-if (el.shopName2) el.shopName2.textContent = CONFIG.shopName || 'Loja';
-if (el.address) el.address.textContent = CONFIG.address || '';
-if (el.year) el.year.textContent = String(new Date().getFullYear());
+// Formatação moeda
+const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
-// --- Carrinho ---
-let cart = loadCart();
-function loadCart(){
-  try {
-    const saved = localStorage.getItem('ht_cart');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (parsed && parsed.items && Array.isArray(parsed.items)) {
-        const map = {};
-        parsed.items.forEach(it=>{
-          const m = MENU.find(x => x.name === it.name);
-          if (m) map[m.id] = (map[m.id]||0) + (it.qty||1);
-        });
-        return map;
-      }
-    }
-  } catch {}
-  return {};
-}
-function persistCart(){
-  const items = Object.entries(cart).map(([id, qty])=>{
-    const it = MENU.find(m=>m.id===id);
-    return it ? { name: it.name, qty, total: it.price * qty } : null;
-  }).filter(Boolean);
-  const total = items.reduce((s,i)=>s+(i?.total||0),0);
-  window.__CART__ = { items, total };
-  try { localStorage.setItem('ht_cart', JSON.stringify(window.__CART__)); } catch {}
-}
-function updateCartUI(){
-  const entries = Object.entries(cart);
-  const count = entries.reduce((s, [,q]) => s+q, 0);
-  const total = entries.reduce((s, [id,q]) => {
-    const it = MENU.find(m => m.id===id);
-    return s + (it ? it.price*q : 0);
-  }, 0);
-  if (el.cartCount) el.cartCount.textContent = count;
-  if (el.cartTotal) el.cartTotal.textContent = BRL.format(total);
-  persistCart();
-}
-function add(id){ cart[id] = (cart[id]||0) + 1; updateCartUI(); }
-function dec(id){
-  if(!cart[id]) return;
-  cart[id]--;
-  if(cart[id] <= 0) delete cart[id];
-  updateCartUI();
-}
+// Itens do menu
+const MENU = [
+  { id: 1, name: "Pastel de Carne", desc: "Carne moída temperada", price: 12, tag: "pastel" },
+  { id: 2, name: "Pastel de Queijo", desc: "Mussarela derretida", price: 11, tag: "pastel" },
+  { id: 3, name: "Coca-Cola Lata", desc: "350ml bem gelada", price: 6, tag: "bebida" },
+  { id: 4, name: "Cerveja Skol", desc: "Lata 350ml", price: 7, tag: "cerveja" },
+  { id: 5, name: "Espetinho de Frango", desc: "Com farofa e vinagrete", price: 9, tag: "espetinho" },
+  { id: 6, name: "Combo Pastel + Refri", desc: "Qualquer pastel + refri lata", price: 16, tag: "promo" }
+];
 
-// --- Renderização ---
-function cardHTML(it){
-  return `
-    <article class="card">
-      <h3>${it.name} ${it.tag==='promo' ? '<span class="badge">Promo</span>' : ''}</h3>
-      <p>${it.desc ?? ''}</p>
-      <div><span class="price">${BRL.format(it.price)}</span></div>
-      <div class="actions">
-        <button class="btn ghost" data-dec="${it.id}" type="button">–</button>
-        <button class="btn" data-inc="${it.id}" type="button">Adicionar</button>
-      </div>
-    </article>
-  `;
+// Estado carrinho
+let cart = [];
+
+// Seletores
+const shopName = document.getElementById("shopName");
+const shopName2 = document.getElementById("shopName2");
+const address = document.getElementById("address");
+const year = document.getElementById("year");
+const grid = document.getElementById("menuGrid");
+const cartCount = document.getElementById("cartCount");
+const cartTotal = document.getElementById("cartTotal");
+
+// Preenche infos da loja
+shopName.textContent = CONFIG.shopName;
+shopName2.textContent = CONFIG.shopName;
+address.textContent = CONFIG.address;
+year.textContent = new Date().getFullYear();
+
+// Renderizar menu
+function renderMenu(filter = "todos", search = "") {
+  grid.innerHTML = "";
+  MENU.filter(item => (filter === "todos" || item.tag === filter) &&
+                      item.name.toLowerCase().includes(search.toLowerCase()))
+      .forEach(item => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <h3>${item.name}</h3>
+          <p>${item.desc}</p>
+          <strong>${BRL.format(item.price)}</strong>
+          <button onclick="addToCart(${item.id})">Adicionar</button>
+        `;
+        grid.appendChild(card);
+      });
 }
-function renderList(list){
-  if (!el.grid) return;
-  el.grid.innerHTML = list.map(cardHTML).join('');
-}
-function applyFilter(){
-  const q = (el.search?.value || '').trim().toLowerCase();
-  const active = document.querySelector(".chip.active")?.dataset.filter ?? "todos";
-  const list = MENU.filter(x =>
-    (active === "todos" || x.tag === active) &&
-    (x.name.toLowerCase().includes(q) || (x.desc||"").toLowerCase().includes(q))
-  );
-  renderList(list);
+renderMenu();
+
+// Adicionar ao carrinho
+function addToCart(id) {
+  const item = MENU.find(i => i.id === id);
+  cart.push(item);
+  updateCart();
 }
 
-// Delegação clique
-document.addEventListener('click', (ev)=>{
-  const inc = ev.target.closest?.('[data-inc]')?.dataset.inc;
-  const decId = ev.target.closest?.('[data-dec]')?.dataset.dec;
-  if (inc){ add(inc); }
-  if (decId){ dec(decId); }
-});
+// Atualizar carrinho
+function updateCart() {
+  cartCount.textContent = cart.length;
+  cartTotal.textContent = BRL.format(cart.reduce((sum, i) => sum + i.price, 0));
+}
 
 // Limpar carrinho
-el.clearBtn?.addEventListener('click', ()=>{
-  cart = {};
-  updateCartUI();
+document.getElementById("clearBtn").addEventListener("click", () => {
+  cart = [];
+  updateCart();
 });
 
-// Chips/busca
-el.chips.forEach(ch => ch.addEventListener('click', ()=>{
-  el.chips.forEach(x=>x.classList.remove('active'));
-  ch.classList.add('active');
-  applyFilter();
-}));
-el.search?.addEventListener('input', applyFilter);
+// Filtros chips
+document.querySelectorAll(".chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    renderMenu(chip.dataset.filter, document.getElementById("searchInput").value);
+  });
+});
 
-// Primeira renderização
-applyFilter();
-updateCartUI();
+// Busca
+document.getElementById("searchInput").addEventListener("input", e => {
+  const filter = document.querySelector(".chip.active").dataset.filter;
+  renderMenu(filter, e.target.value);
+});
 
-// --- Enviar pedido via WhatsApp ---
-document.getElementById("btnEnviar")?.addEventListener("click", () => {
-  const nome = document.getElementById("nome")?.value || "";
-  const endereco = document.getElementById("endereco")?.value || "";
-  const pagamento = document.getElementById("pagamento")?.value || "";
+// Enviar WhatsApp
+document.getElementById("btnEnviar").addEventListener("click", () => {
+  const nome = document.getElementById("nome").value;
+  const endereco = document.getElementById("endereco").value;
+  const pagamento = document.getElementById("pagamento").value;
 
-  if(!nome){
-    alert("Preencha o nome antes de enviar.");
+  if (cart.length === 0) {
+    alert("Seu carrinho está vazio!");
     return;
   }
 
-  const itens = Object.entries(cart).map(([id, qty]) => {
-    const it = MENU.find(m => m.id === id);
-    return it ? `- ${it.name} x${qty} (${BRL.format(it.price*qty)})` : "";
-  }).join("\n");
+  let mensagem = `📦 *Pedido - ${CONFIG.shopName}*\n\n`;
+  mensagem += cart.map(i => `• ${i.name} - ${BRL.format(i.price)}`).join("\n");
+  mensagem += `\n\n*Total:* ${BRL.format(cart.reduce((s, i) => s + i.price, 0))}`;
+  mensagem += `\n\n👤 Cliente: ${nome || "Não informado"}`;
+  if (endereco) mensagem += `\n🏠 Endereço: ${endereco}`;
+  mensagem += `\n💳 Pagamento: ${pagamento}`;
 
-  const total = Object.entries(cart).reduce((s,[id,qty])=>{
-    const it = MENU.find(m=>m.id===id);
-    return s+(it?it.price*qty:0);
-  },0);
-
-  const msg = 
-`🍴 Pedido de ${nome}
-📍 Endereço: ${endereco}
-💳 Pagamento: ${pagamento}
-
-🛒 Itens:
-${itens}
-
-Total: ${BRL.format(total)}`;
-
-  const url = `https://wa.me/${CONFIG.phone}?text=${encodeURIComponent(msg)}`;
+  const url = `https://wa.me/${CONFIG.phone}?text=${encodeURIComponent(mensagem)}`;
   window.open(url, "_blank");
 });
