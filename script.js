@@ -237,6 +237,45 @@ checkoutBtn.addEventListener("click", () => {
   window.open(url, "_blank");
 });
 
+// ===== IMPRESSÃO =====
+function buildReceiptHTML({ cliente, tipo, endereco, obs, itens, total }) {
+  return `
+  <html><head><meta charset="utf-8"><title>Pedido</title></head>
+  <body>
+    <h2>HelpTech Antunes – Pedido</h2>
+    <p><b>Cliente:</b> ${cliente}</p>
+    <p><b>Tipo:</b> ${tipo}</p>
+    ${tipo === "Entrega" ? `<p><b>Endereço:</b> ${endereco}</p>` : ""}
+    ${obs ? `<p><b>Obs:</b> ${obs}</p>` : ""}
+    <hr>
+    <ul>
+      ${itens.map(c => `<li>${c.qtd}x ${c.name} — ${BRL.format(c.price * c.qtd)}</li>`).join("")}
+    </ul>
+    <h3>Total: ${BRL.format(total)}</h3>
+    <script>window.print()</script>
+  </body></html>`;
+}
+
+printBtn.addEventListener("click", () => {
+  if (cart.length === 0) return alert("Carrinho vazio!");
+  const clientName = clientNameEl.value.trim();
+  if (!clientName) return alert("Digite seu nome!");
+
+  const orderType = orderTypeEl.value;
+  const address = addressEl.value.trim();
+  if (orderType === "Entrega" && !address) return alert("Informe endereço!");
+
+  const notes = notesEl.value.trim();
+  const total = cart.reduce((s, c) => s + c.price * c.qtd, 0);
+  const html = buildReceiptHTML({ cliente: clientName, tipo: orderType, endereco: address, obs: notes, itens: cart, total });
+
+  const w = window.open("", "_blank");
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+});
+
+
 // ===== INICIALIZAÇÃO =====
 renderMenu(MENU);
 renderCart();
