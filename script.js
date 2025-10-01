@@ -1,15 +1,8 @@
-// Config loja
-const CONFIG = {
-  shopName: "Pastelaria Antunes",
-  address: "Rua Central, 123 - Jundiaí/SP",
-  phone: "5511957805217" // formato DDI + DDD + número
-};
+// ===== CONFIGURAÇÕES =====
+const PHONE_WHATSAPP = "5511957805217"; // seu número (DDD + número, sem símbolos)
+const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 
-// Formatação moeda
-const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
-
-// Itens do menu
-// === PASTEIS ===
+// ===== DADOS (categorias separadas) =====
 const MENU_PASTEIS = [
   { id: 1, name: "Pastel de Carne", desc: "Carne moída temperada", price: 12, tag: "pastel" },
   { id: 2, name: "Pastel de Queijo", desc: "Mussarela derretida", price: 11, tag: "pastel" },
@@ -18,147 +11,233 @@ const MENU_PASTEIS = [
   { id: 5, name: "Pastel de Pizza", desc: "Mussarela, presunto, tomate e orégano", price: 14, tag: "pastel" },
   { id: 6, name: "Pastel de Camarão", desc: "Camarão ao alho + catupiry", price: 18, tag: "pastel" },
   { id: 7, name: "Pastel de Carne Seca", desc: "Carne seca com queijo coalho", price: 17, tag: "pastel" },
-  { id: 8, name: "Pastel Vegetariano", desc: "Brócolis, milho, ervilha e queijo", price: 13, tag: "pastel" },
-  { id: 9, name: "Pastel Doce de Chocolate", desc: "Chocolate derretido + granulado", price: 12, tag: "pastel-doce" },
-  { id: 10, name: "Pastel de Banana c/ Canela", desc: "Banana, açúcar e canela", price: 11, tag: "pastel-doce" }
+  { id: 8, name: "Pastel Vegetariano", desc: "Brócolis, milho, ervilha e queijo", price: 13, tag: "pastel" }
 ];
 
-// === BEBIDAS REFRIGERANTES ===
+const MENU_PASTEIS_DOCES = [
+  { id: 101, name: "Pastel Doce de Chocolate", desc: "Chocolate derretido + granulado", price: 12, tag: "pastel-doce" },
+  { id: 102, name: "Pastel de Banana c/ Canela", desc: "Banana, açúcar e canela", price: 11, tag: "pastel-doce" },
+  { id: 103, name: "Romeu & Julieta", desc: "Goiabada com queijo", price: 12, tag: "pastel-doce" }
+];
+
 const MENU_REFRIGERANTES = [
-  { id: 20, name: "Coca-Cola Lata", desc: "350ml bem gelada", price: 6, tag: "bebida" },
-  { id: 21, name: "Guaraná Antarctica Lata", desc: "350ml bem gelada", price: 6, tag: "bebida" },
-  { id: 22, name: "Fanta Laranja Lata", desc: "350ml bem gelada", price: 6, tag: "bebida" },
-  { id: 23, name: "Coca-Cola 2L", desc: "Garrafa 2 litros", price: 12, tag: "bebida" },
-  { id: 24, name: "Guaraná 2L", desc: "Garrafa 2 litros", price: 11, tag: "bebida" }
+  { id: 201, name: "Coca-Cola Lata", desc: "350ml gelada", price: 6, tag: "bebida" },
+  { id: 202, name: "Guaraná Antarctica Lata", desc: "350ml gelada", price: 6, tag: "bebida" },
+  { id: 203, name: "Fanta Laranja Lata", desc: "350ml gelada", price: 6, tag: "bebida" },
+  { id: 204, name: "Coca-Cola 2L", desc: "Garrafa 2 litros", price: 12, tag: "bebida" },
+  { id: 205, name: "Guaraná 2L", desc: "Garrafa 2 litros", price: 11, tag: "bebida" },
+  { id: 206, name: "Água Mineral", desc: "Sem gás 500ml", price: 4, tag: "bebida" }
 ];
 
-// === CERVEJAS ===
 const MENU_CERVEJAS = [
-  { id: 30, name: "Skol Lata", desc: "Lata 350ml", price: 7, tag: "cerveja" },
-  { id: 31, name: "Brahma Lata", desc: "Lata 350ml", price: 7, tag: "cerveja" },
-  { id: 32, name: "Heineken Long Neck", desc: "330ml gelada", price: 10, tag: "cerveja" },
-  { id: 33, name: "Stella Artois Long Neck", desc: "330ml gelada", price: 10, tag: "cerveja" },
-  { id: 34, name: "Original 600ml", desc: "Garrafa 600ml", price: 12, tag: "cerveja" }
+  { id: 301, name: "Skol Lata", desc: "Lata 350ml", price: 7, tag: "cerveja" },
+  { id: 302, name: "Brahma Lata", desc: "Lata 350ml", price: 7, tag: "cerveja" },
+  { id: 303, name: "Heineken Long Neck", desc: "330ml gelada", price: 10, tag: "cerveja" },
+  { id: 304, name: "Stella Artois Long Neck", desc: "330ml gelada", price: 10, tag: "cerveja" },
+  { id: 305, name: "Original 600ml", desc: "Garrafa 600ml", price: 12, tag: "cerveja" }
 ];
 
-// === ESPETINHOS ===
 const MENU_ESPETINHOS = [
-  { id: 40, name: "Espetinho de Frango", desc: "Com farofa e vinagrete", price: 9, tag: "espetinho" },
-  { id: 41, name: "Espetinho de Carne", desc: "Com farofa e vinagrete", price: 10, tag: "espetinho" },
-  { id: 42, name: "Espetinho de Linguiça", desc: "Com farofa e vinagrete", price: 9, tag: "espetinho" },
-  { id: 43, name: "Espetinho de Queijo Coalho", desc: "Assado na brasa", price: 8, tag: "espetinho" }
+  { id: 401, name: "Espetinho de Frango", desc: "Com farofa e vinagrete", price: 9, tag: "espetinho" },
+  { id: 402, name: "Espetinho de Carne", desc: "Com farofa e vinagrete", price: 10, tag: "espetinho" },
+  { id: 403, name: "Espetinho de Linguiça", desc: "Com farofa e vinagrete", price: 9, tag: "espetinho" },
+  { id: 404, name: "Queijo Coalho no Espeto", desc: "Assado na brasa", price: 8, tag: "espetinho" }
 ];
 
-// === COMBOS / PROMOÇÕES ===
 const MENU_COMBOS = [
-  { id: 50, name: "Combo Pastel + Refri", desc: "Qualquer pastel + refrigerante lata", price: 16, tag: "promo" },
-  { id: 51, name: "Combo 2 Pasteis + Refri 2L", desc: "2 pasteis + Coca 2L", price: 35, tag: "promo" },
-  { id: 52, name: "Combo Espetinho + Cerveja", desc: "Espetinho à escolha + cerveja lata", price: 15, tag: "promo" }
+  { id: 501, name: "Combo Pastel + Refri", desc: "Qualquer pastel + refrigerante lata", price: 16, tag: "promo" },
+  { id: 502, name: "Combo 2 Pasteis + Refri 2L", desc: "2 pasteis + Coca 2L", price: 35, tag: "promo" },
+  { id: 503, name: "Combo Espetinho + Cerveja", desc: "Espetinho à escolha + cerveja lata", price: 15, tag: "promo" }
 ];
 
-// === CARDÁPIO GERAL ===
+// Cardápio geral
 const MENU = [
   ...MENU_PASTEIS,
+  ...MENU_PASTEIS_DOCES,
   ...MENU_REFRIGERANTES,
   ...MENU_CERVEJAS,
   ...MENU_ESPETINHOS,
   ...MENU_COMBOS
 ];
 
-
-// Estado carrinho
+// ===== ESTADO =====
 let cart = [];
 
-// Seletores
-const shopName = document.getElementById("shopName");
-const shopName2 = document.getElementById("shopName2");
-const address = document.getElementById("address");
-const year = document.getElementById("year");
-const grid = document.getElementById("menuGrid");
-const cartCount = document.getElementById("cartCount");
-const cartTotal = document.getElementById("cartTotal");
+// ===== ELEMENTOS =====
+const menuContainer = document.getElementById("menu-sections");
+const cartList = document.getElementById("cart-items");
+const cartTotalEl = document.getElementById("cart-total");
+const searchInput = document.getElementById("searchInput");
+const chips = Array.from(document.querySelectorAll(".chip"));
+const checkoutBtn = document.getElementById("checkoutBtn");
 
-// Preenche infos da loja
-shopName.textContent = CONFIG.shopName;
-shopName2.textContent = CONFIG.shopName;
-address.textContent = CONFIG.address;
-year.textContent = new Date().getFullYear();
+const clientNameEl = document.getElementById("clientName");
+const orderTypeEl = document.getElementById("orderType");
+const addressEl = document.getElementById("address");
+const notesEl = document.getElementById("notes");
 
-// Renderizar menu
-function renderMenu(filter = "todos", search = "") {
-  grid.innerHTML = "";
-  MENU.filter(item => (filter === "todos" || item.tag === filter) &&
-                      item.name.toLowerCase().includes(search.toLowerCase()))
-      .forEach(item => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <h3>${item.name}</h3>
-          <p>${item.desc}</p>
-          <strong>${BRL.format(item.price)}</strong>
-          <button class="btn-add" data-id="${item.id}">Adicionar</button>
-        `;
-        grid.appendChild(card);
-      });
-}
-renderMenu();
-
-// Evento de clique no grid (delegação)
-grid.addEventListener("click", (e) => {
-  const btn = e.target.closest(".btn-add");
-  if (!btn) return;
-  const id = Number(btn.dataset.id);
-  const item = MENU.find(i => i.id === id);
-  if (!item) return;
-  cart.push(item);
-  updateCart();
-});
-
-// Atualizar carrinho
-function updateCart() {
-  cartCount.textContent = cart.length;
-  cartTotal.textContent = BRL.format(cart.reduce((sum, i) => sum + i.price, 0));
+// ===== RENDER =====
+function cardHTML(item) {
+  return `
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-start">
+            <h5 class="card-title mb-1">${item.name}</h5>
+            <span class="badge badge-tag">${item.tag}</span>
+          </div>
+          <p class="card-text text-muted mb-2">${item.desc}</p>
+          <div class="mt-auto d-flex justify-content-between align-items-center">
+            <div class="price">${BRL.format(item.price)}</div>
+            <button class="btn btn-primary btn-sm" data-add="${item.id}">Adicionar</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
 }
 
-// Limpar carrinho
-document.getElementById("clearBtn").addEventListener("click", () => {
-  cart = [];
-  updateCart();
-});
-
-// Filtros chips
-document.querySelectorAll(".chip").forEach(chip => {
-  chip.addEventListener("click", () => {
-    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-    chip.classList.add("active");
-    renderMenu(chip.dataset.filter, document.getElementById("searchInput").value);
+function renderMenu(list) {
+  menuContainer.innerHTML = `
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+      ${list.map(cardHTML).join("")}
+    </div>
+  `;
+  // Bind botões "Adicionar"
+  menuContainer.querySelectorAll("[data-add]").forEach(btn => {
+    btn.addEventListener("click", () => addToCart(Number(btn.dataset.add)));
   });
+}
+
+function renderCart() {
+  cartList.innerHTML = "";
+  let total = 0;
+  cart.forEach(item => {
+    total += item.price * item.qtd;
+    const li = document.createElement("li");
+    li.className = "list-group-item d-flex justify-content-between align-items-center";
+    li.innerHTML = `
+      <div>
+        <strong>${item.qtd}x</strong> ${item.name}
+        <small class="text-muted d-block">${BRL.format(item.price)} cada</small>
+      </div>
+      <div class="d-flex align-items-center">
+        <button class="btn btn-sm btn-outline-secondary me-2" data-dec="${item.id}">−</button>
+        <button class="btn btn-sm btn-outline-secondary me-2" data-inc="${item.id}">+</button>
+        <span class="fw-bold me-2">${BRL.format(item.price * item.qtd)}</span>
+        <button class="btn btn-sm btn-danger" data-del="${item.id}">✖</button>
+      </div>
+    `;
+    cartList.appendChild(li);
+  });
+  cartTotalEl.textContent = BRL.format(total);
+
+  // Bind botões do carrinho
+  cartList.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => removeFromCart(Number(b.dataset.del))));
+  cartList.querySelectorAll("[data-inc]").forEach(b => b.addEventListener("click", () => changeQty(Number(b.dataset.inc), +1)));
+  cartList.querySelectorAll("[data-dec]").forEach(b => b.addEventListener("click", () => changeQty(Number(b.dataset.dec), -1)));
+}
+
+// ===== LÓGICA DO CARRINHO =====
+function addToCart(id) {
+  const item = MENU.find(x => x.id === id);
+  if (!item) return;
+  const found = cart.find(c => c.id === id);
+  if (found) found.qtd++;
+  else cart.push({ ...item, qtd: 1 });
+  renderCart();
+}
+
+function changeQty(id, delta) {
+  const i = cart.findIndex(c => c.id === id);
+  if (i < 0) return;
+  cart[i].qtd += delta;
+  if (cart[i].qtd <= 0) cart.splice(i, 1);
+  renderCart();
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(c => c.id !== id);
+  renderCart();
+}
+
+// ===== FILTROS (busca + chips) =====
+function applyFilters() {
+  const term = (searchInput.value || "").toLowerCase().trim();
+  const activeChip = document.querySelector(".chip.active");
+  const tag = activeChip ? activeChip.dataset.filter : "todos";
+
+  const filtered = MENU.filter(it => {
+    const matchTag = tag === "todos" ? true : it.tag === tag;
+    const matchText = term ? (it.name.toLowerCase().includes(term) || it.desc.toLowerCase().includes(term)) : true;
+    return matchTag && matchText;
+  });
+
+  renderMenu(filtered);
+}
+
+searchInput.addEventListener("input", applyFilters);
+chips.forEach(ch => ch.addEventListener("click", () => {
+  chips.forEach(c => c.classList.remove("active"));
+  ch.classList.add("active");
+  applyFilters();
+}));
+
+// Habilita/desabilita endereço conforme o tipo
+orderTypeEl.addEventListener("change", () => {
+  const entrega = orderTypeEl.value === "Entrega";
+  addressEl.disabled = !entrega;
+  if (!entrega) addressEl.value = "";
 });
 
-// Busca
-document.getElementById("searchInput").addEventListener("input", e => {
-  const filter = document.querySelector(".chip.active").dataset.filter;
-  renderMenu(filter, e.target.value);
-});
-
-// Enviar WhatsApp
-document.getElementById("btnEnviar").addEventListener("click", () => {
-  const nome = document.getElementById("nome").value;
-  const endereco = document.getElementById("endereco").value;
-  const pagamento = document.getElementById("pagamento").value;
-
+// ===== WHATSAPP CHECKOUT =====
+checkoutBtn.addEventListener("click", () => {
   if (cart.length === 0) {
-    alert("Seu carrinho está vazio!");
+    alert("Carrinho vazio!");
     return;
   }
 
-  let mensagem = `📦 *Pedido - ${CONFIG.shopName}*\n\n`;
-  mensagem += cart.map(i => `• ${i.name} - ${BRL.format(i.price)}`).join("\n");
-  mensagem += `\n\n*Total:* ${BRL.format(cart.reduce((s, i) => s + i.price, 0))}`;
-  mensagem += `\n\n👤 Cliente: ${nome || "Não informado"}`;
-  if (endereco) mensagem += `\n🏠 Endereço: ${endereco}`;
-  mensagem += `\n💳 Pagamento: ${pagamento}`;
+  const clientName = clientNameEl.value.trim();
+  if (!clientName) {
+    alert("Digite seu nome antes de finalizar o pedido!");
+    clientNameEl.focus();
+    return;
+  }
 
-  const url = `https://wa.me/${CONFIG.phone}?text=${encodeURIComponent(mensagem)}`;
+  const orderType = orderTypeEl.value;
+  const address = addressEl.value.trim();
+  if (orderType === "Entrega" && !address) {
+    alert("Informe o endereço para entrega.");
+    addressEl.focus();
+    return;
+  }
+
+  const notes = notesEl.value.trim();
+
+  // Monta a mensagem
+  let lines = [];
+  lines.push("*Pedido HelpTech Antunes*");
+  lines.push(`👤 Cliente: ${clientName}`);
+  lines.push(`🧾 Tipo: ${orderType}`);
+  if (orderType === "Entrega") lines.push(`📍 Endereço: ${address}`);
+  if (notes) lines.push(`📝 Obs.: ${notes}`);
+  lines.push(""); // linha em branco
+
+  cart.forEach(c => {
+    lines.push(`${c.qtd}x ${c.name} — ${BRL.format(c.price * c.qtd)}`);
+  });
+
+  const total = cart.reduce((s, c) => s + c.price * c.qtd, 0);
+  lines.push("");
+  lines.push(`*Total: ${BRL.format(total)}*`);
+  lines.push("");
+  lines.push("Quero finalizar o pedido.");
+
+  const msg = encodeURIComponent(lines.join("\n"));
+  const url = `https://wa.me/${PHONE_WHATSAPP}?text=${msg}`;
   window.open(url, "_blank");
 });
+
+// ===== INICIALIZAÇÃO =====
+renderMenu(MENU);
+renderCart();
+applyFilters();
