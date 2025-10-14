@@ -1,8 +1,16 @@
-// ===== CONFIGURAÇÕES =====
-const PHONE_WHATSAPP = "5511957805217"; // seu número (DDD + número, sem símbolos)
-const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+// =============================
+// 🍔 CARDÁPIO HELPTECH ANTUNES COMPLETO
+// =============================
 
-// ===== DADOS (categorias separadas) =====
+// ===== CONFIGURAÇÕES =====
+const PHONE_WHATSAPP = "5511957805217"; // número com DDI + DDD
+const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+
+// =============================
+// 📦 DADOS DO CARDÁPIO
+// =============================
+
+// --- Pastéis Salgados ---
 const MENU_PASTEIS = [
   { id: 1, name: "Pastel de Carne", desc: "Carne moída temperada", price: 12, tag: "pastel" },
   { id: 2, name: "Pastel de Queijo", desc: "Mussarela derretida", price: 11, tag: "pastel" },
@@ -14,12 +22,14 @@ const MENU_PASTEIS = [
   { id: 8, name: "Pastel Vegetariano", desc: "Brócolis, milho, ervilha e queijo", price: 13, tag: "pastel" }
 ];
 
+// --- Pastéis Doces ---
 const MENU_PASTEIS_DOCES = [
   { id: 101, name: "Pastel Doce de Chocolate", desc: "Chocolate derretido + granulado", price: 12, tag: "pastel-doce" },
   { id: 102, name: "Pastel de Banana c/ Canela", desc: "Banana, açúcar e canela", price: 11, tag: "pastel-doce" },
   { id: 103, name: "Romeu & Julieta", desc: "Goiabada com queijo", price: 12, tag: "pastel-doce" }
 ];
 
+// --- Refrigerantes ---
 const MENU_REFRIGERANTES = [
   { id: 201, name: "Coca-Cola Lata", desc: "350ml gelada", price: 6, tag: "bebida" },
   { id: 202, name: "Guaraná Antarctica Lata", desc: "350ml gelada", price: 6, tag: "bebida" },
@@ -29,6 +39,7 @@ const MENU_REFRIGERANTES = [
   { id: 206, name: "Água Mineral", desc: "Sem gás 500ml", price: 4, tag: "bebida" }
 ];
 
+// --- Cervejas ---
 const MENU_CERVEJAS = [
   { id: 301, name: "Skol Lata", desc: "Lata 350ml", price: 7, tag: "cerveja" },
   { id: 302, name: "Brahma Lata", desc: "Lata 350ml", price: 7, tag: "cerveja" },
@@ -37,6 +48,7 @@ const MENU_CERVEJAS = [
   { id: 305, name: "Original 600ml", desc: "Garrafa 600ml", price: 12, tag: "cerveja" }
 ];
 
+// --- Espetinhos ---
 const MENU_ESPETINHOS = [
   { id: 401, name: "Espetinho de Frango", desc: "Com farofa e vinagrete", price: 9, tag: "espetinho" },
   { id: 402, name: "Espetinho de Carne", desc: "Com farofa e vinagrete", price: 10, tag: "espetinho" },
@@ -44,13 +56,14 @@ const MENU_ESPETINHOS = [
   { id: 404, name: "Queijo Coalho no Espeto", desc: "Assado na brasa", price: 8, tag: "espetinho" }
 ];
 
+// --- Combos Promocionais ---
 const MENU_COMBOS = [
-  { id: 501, name: "Combo Pastel + Refri", desc: "Qualquer pastel + refrigerante lata", price: 16, tag: "promo" },
+  { id: 501, name: "Combo Pastel + Refri", desc: "Qualquer pastel + refri lata", price: 16, tag: "promo" },
   { id: 502, name: "Combo 2 Pasteis + Refri 2L", desc: "2 pasteis + Coca 2L", price: 35, tag: "promo" },
   { id: 503, name: "Combo Espetinho + Cerveja", desc: "Espetinho à escolha + cerveja lata", price: 15, tag: "promo" }
 ];
 
-// Cardápio geral
+// Junta tudo no menu geral
 const MENU = [
   ...MENU_PASTEIS,
   ...MENU_PASTEIS_DOCES,
@@ -60,36 +73,41 @@ const MENU = [
   ...MENU_COMBOS
 ];
 
-// ===== ESTADO =====
+// =============================
+// 🧭 VARIÁVEIS E ELEMENTOS
+// =============================
 let cart = [];
-
-// ===== ELEMENTOS =====
 const menuContainer = document.getElementById("menu-sections");
 const cartList = document.getElementById("cart-items");
 const cartTotalEl = document.getElementById("cart-total");
 const searchInput = document.getElementById("searchInput");
 const chips = Array.from(document.querySelectorAll(".chip"));
 const checkoutBtn = document.getElementById("checkoutBtn");
+const printBtn = document.getElementById("printBtn");
 
 const clientNameEl = document.getElementById("clientName");
 const orderTypeEl = document.getElementById("orderType");
 const addressEl = document.getElementById("address");
 const notesEl = document.getElementById("notes");
 
-// ===== RENDER =====
+// =============================
+// 🧾 RENDERIZAÇÃO DO CARDÁPIO
+// =============================
 function cardHTML(item) {
   return `
     <div class="col">
-      <div class="card h-100">
+      <div class="card h-100 shadow-sm">
         <div class="card-body d-flex flex-column">
           <div class="d-flex justify-content-between align-items-start">
-            <h5 class="card-title mb-1">${item.name}</h5>
-            <span class="badge badge-tag">${item.tag}</span>
+            <h5 class="card-title mb-1 text-success">${item.name}</h5>
+            <span class="badge bg-light text-dark">${item.tag}</span>
           </div>
           <p class="card-text text-muted mb-2">${item.desc}</p>
           <div class="mt-auto d-flex justify-content-between align-items-center">
-            <div class="price">${BRL.format(item.price)}</div>
-            <button class="btn btn-primary btn-sm" data-add="${item.id}">Adicionar</button>
+            <div class="price fw-bold">${BRL.format(item.price)}</div>
+            <button class="btn btn-success btn-sm" data-add="${item.id}">
+              <i class="bi bi-plus-circle"></i> Adicionar
+            </button>
           </div>
         </div>
       </div>
@@ -102,15 +120,20 @@ function renderMenu(list) {
       ${list.map(cardHTML).join("")}
     </div>
   `;
-  // Bind botões "Adicionar"
+
+  // Eventos dos botões "Adicionar"
   menuContainer.querySelectorAll("[data-add]").forEach(btn => {
     btn.addEventListener("click", () => addToCart(Number(btn.dataset.add)));
   });
 }
 
+// =============================
+// 🛒 CARRINHO
+// =============================
 function renderCart() {
   cartList.innerHTML = "";
   let total = 0;
+
   cart.forEach(item => {
     total += item.price * item.qtd;
     const li = document.createElement("li");
@@ -129,15 +152,17 @@ function renderCart() {
     `;
     cartList.appendChild(li);
   });
+
   cartTotalEl.textContent = BRL.format(total);
 
-  // Bind botões do carrinho
   cartList.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => removeFromCart(Number(b.dataset.del))));
   cartList.querySelectorAll("[data-inc]").forEach(b => b.addEventListener("click", () => changeQty(Number(b.dataset.inc), +1)));
   cartList.querySelectorAll("[data-dec]").forEach(b => b.addEventListener("click", () => changeQty(Number(b.dataset.dec), -1)));
 }
 
-// ===== LÓGICA DO CARRINHO =====
+// =============================
+// 🧮 LÓGICA DO CARRINHO
+// =============================
 function addToCart(id) {
   const item = MENU.find(x => x.id === id);
   if (!item) return;
@@ -160,7 +185,9 @@ function removeFromCart(id) {
   renderCart();
 }
 
-// ===== FILTROS (busca + chips) =====
+// =============================
+// 🔍 FILTROS E BUSCA
+// =============================
 function applyFilters() {
   const term = (searchInput.value || "").toLowerCase().trim();
   const activeChip = document.querySelector(".chip.active");
@@ -168,7 +195,9 @@ function applyFilters() {
 
   const filtered = MENU.filter(it => {
     const matchTag = tag === "todos" ? true : it.tag === tag;
-    const matchText = term ? (it.name.toLowerCase().includes(term) || it.desc.toLowerCase().includes(term)) : true;
+    const matchText = term
+      ? it.name.toLowerCase().includes(term) || it.desc.toLowerCase().includes(term)
+      : true;
     return matchTag && matchText;
   });
 
@@ -182,49 +211,40 @@ chips.forEach(ch => ch.addEventListener("click", () => {
   applyFilters();
 }));
 
-// Habilita/desabilita endereço conforme o tipo
+// =============================
+// 🚚 ENDEREÇO DE ENTREGA
+// =============================
 orderTypeEl.addEventListener("change", () => {
   const entrega = orderTypeEl.value === "Entrega";
   addressEl.disabled = !entrega;
   if (!entrega) addressEl.value = "";
 });
 
-// ===== WHATSAPP CHECKOUT =====
+// =============================
+// 💬 FINALIZAR PEDIDO (WhatsApp)
+// =============================
 checkoutBtn.addEventListener("click", () => {
-  if (cart.length === 0) {
-    alert("Carrinho vazio!");
-    return;
-  }
+  if (cart.length === 0) return alert("Carrinho vazio!");
 
   const clientName = clientNameEl.value.trim();
-  if (!clientName) {
-    alert("Digite seu nome antes de finalizar o pedido!");
-    clientNameEl.focus();
-    return;
-  }
+  if (!clientName) return alert("Digite seu nome antes de finalizar o pedido!");
 
   const orderType = orderTypeEl.value;
   const address = addressEl.value.trim();
-  if (orderType === "Entrega" && !address) {
-    alert("Informe o endereço para entrega.");
-    addressEl.focus();
-    return;
-  }
+  if (orderType === "Entrega" && !address) return alert("Informe o endereço para entrega.");
 
   const notes = notesEl.value.trim();
 
-  // Monta a mensagem
+  // Montar mensagem WhatsApp
   let lines = [];
   lines.push("*Pedido HelpTech Antunes*");
   lines.push(`👤 Cliente: ${clientName}`);
   lines.push(`🧾 Tipo: ${orderType}`);
   if (orderType === "Entrega") lines.push(`📍 Endereço: ${address}`);
   if (notes) lines.push(`📝 Obs.: ${notes}`);
-  lines.push(""); // linha em branco
+  lines.push("");
 
-  cart.forEach(c => {
-    lines.push(`${c.qtd}x ${c.name} — ${BRL.format(c.price * c.qtd)}`);
-  });
+  cart.forEach(c => lines.push(`${c.qtd}x ${c.name} — ${BRL.format(c.price * c.qtd)}`));
 
   const total = cart.reduce((s, c) => s + c.price * c.qtd, 0);
   lines.push("");
@@ -233,11 +253,12 @@ checkoutBtn.addEventListener("click", () => {
   lines.push("Quero finalizar o pedido.");
 
   const msg = encodeURIComponent(lines.join("\n"));
-  const url = `https://wa.me/${PHONE_WHATSAPP}?text=${msg}`;
-  window.open(url, "_blank");
+  window.open(`https://wa.me/${PHONE_WHATSAPP}?text=${msg}`, "_blank");
 });
 
-// ===== IMPRESSÃO =====
+// =============================
+// 🖨️ IMPRESSÃO DO PEDIDO
+// =============================
 function buildReceiptHTML({ cliente, tipo, endereco, obs, itens, total }) {
   return `
   <html><head><meta charset="utf-8"><title>Pedido</title></head>
@@ -260,23 +281,21 @@ printBtn.addEventListener("click", () => {
   if (cart.length === 0) return alert("Carrinho vazio!");
   const clientName = clientNameEl.value.trim();
   if (!clientName) return alert("Digite seu nome!");
-
   const orderType = orderTypeEl.value;
   const address = addressEl.value.trim();
-  if (orderType === "Entrega" && !address) return alert("Informe endereço!");
-
+  if (orderType === "Entrega" && !address) return alert("Informe o endereço!");
   const notes = notesEl.value.trim();
   const total = cart.reduce((s, c) => s + c.price * c.qtd, 0);
   const html = buildReceiptHTML({ cliente: clientName, tipo: orderType, endereco: address, obs: notes, itens: cart, total });
-
   const w = window.open("", "_blank");
   w.document.open();
   w.document.write(html);
   w.document.close();
 });
 
-
-// ===== INICIALIZAÇÃO =====
+// =============================
+// 🚀 INICIALIZAÇÃO
+// =============================
 renderMenu(MENU);
 renderCart();
 applyFilters();
