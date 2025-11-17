@@ -62,95 +62,150 @@
       color: #777;
       padding: 1rem 0;
     }
+
+    /* BOTÃO DE PEDIDO */
+    .btn-pedido {
+      display: block;
+      width: 100%;
+      background: #2e7d32;
+      border: none;
+      color: white;
+      padding: 15px;
+      font-size: 20px;
+      margin: 20px 0;
+      border-radius: 12px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+    .btn-pedido:hover {
+      background: #1b5e20;
+    }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>🍴 Cardápio – HelpTech Antunes</h1>
-    <p>Pastéis • Porções • Espetinhos • Bebidas</p>
-  </header>
+<header>
+  <h1>🍴 Cardápio – HelpTech Antunes</h1>
+  <p>Pastéis • Porções • Espetinhos • Bebidas</p>
+</header>
 
-  <main class="container">
-    <section>
-      <h2>🥟 Pastéis Tradicionais</h2>
-      <ul>
-        <li>Queijo <span class="preco">R$ 10,00</span></li>
-        <li>Presunto e Queijo <span class="preco">R$ 11,00</span></li>
-        <li>Carne <span class="preco">R$ 11,00</span></li>
-        <li>Frango com Catupiry <span class="preco">R$ 12,00</span></li>
-        <li>Calabresa com Queijo <span class="preco">R$ 12,00</span></li>
-        <li>Pizza (Presunto, Queijo, Tomate e Orégano) <span class="preco">R$ 12,00</span></li>
-      </ul>
-    </section>
+<main class="container">
 
-    <section>
-      <h2>🌮 Pastéis Especiais</h2>
-      <ul>
-        <li>4 Queijos <span class="preco">R$ 14,00</span></li>
-        <li>Frango com Bacon <span class="preco">R$ 14,00</span></li>
-        <li>Carne com Cheddar <span class="preco">R$ 14,00</span></li>
-        <li>Calabresa com Catupiry <span class="preco">R$ 14,00</span></li>
-        <li>Camarão com Queijo <span class="preco">R$ 16,00</span></li>
-        <li>Moda da Casa <span class="preco">R$ 16,00</span></li>
-      </ul>
-    </section>
+  <!-- Seu cardápio completo aqui (nada mudou) -->
 
-    <section>
-      <h2>🍟 Porções</h2>
-      <ul>
-        <li>Batata Frita 300g <span class="preco">R$ 18,00</span></li>
-        <li>Batata com Cheddar e Bacon <span class="preco">R$ 24,00</span></li>
-        <li>Frango a Passarinho 400g <span class="preco">R$ 26,00</span></li>
-        <li>Mista (Batata + Frango) <span class="preco">R$ 30,00</span></li>
-      </ul>
-    </section>
+  <section>
+    <h2>🥟 Pastéis Tradicionais</h2>
+    <ul>
+      <li>Queijo <span class="preco">R$ 10,00</span></li>
+      <li>Presunto e Queijo <span class="preco">R$ 11,00</span></li>
+      <li>Carne <span class="preco">R$ 11,00</span></li>
+      <li>Frango com Catupiry <span class="preco">R$ 12,00</span></li>
+      <li>Calabresa com Queijo <span class="preco">R$ 12,00</span></li>
+      <li>Pizza (Presunto, Queijo, Tomate e Orégano) <span class="preco">R$ 12,00</span></li>
+    </ul>
+  </section>
 
-    <section>
-      <h2>🍢 Espetinhos</h2>
-      <ul>
-        <li>Carne Bovina <span class="preco">R$ 10,00</span></li>
-        <li>Frango <span class="preco">R$ 9,00</span></li>
-        <li>Medalhão de Frango <span class="preco">R$ 12,00</span></li>
-        <li>Linguiça <span class="preco">R$ 9,00</span></li>
-        <li>Kafta <span class="preco">R$ 10,00</span></li>
-      </ul>
-      <p class="text-center mt-2">➡️ Adicional: Farofa + Vinagrete + Pão — <strong>R$ 3,00</strong></p>
-    </section>
+  <section>
+    <h2>🌮 Pastéis Especiais</h2>
+    <ul>
+      <li>4 Queijos <span class="preco">R$ 14,00</span></li>
+      <li>Frango com Bacon <span class="preco">R$ 14,00</span></li>
+      <li>Carne com Cheddar <span class="preco">R$ 14,00</span></li>
+      <li>Calabresa com Catupiry <span class="preco">R$ 14,00</span></li>
+      <li>Camarão com Queijo <span class="preco">R$ 16,00</span></li>
+      <li>Moda da Casa <span class="preco">R$ 16,00</span></li>
+    </ul>
+  </section>
 
-    <section>
-      <h2>🧃 Bebidas</h2>
-      <h5 class="mt-3">🥤 Refrigerantes</h5>
-      <ul>
-        <li>Lata (vários sabores) <span class="preco">R$ 6,00</span></li>
-        <li>1,5 L <span class="preco">R$ 9,00</span></li>
-        <li>2 L <span class="preco">R$ 11,00</span></li>
-      </ul>
+  <section>
+    <h2>🍟 Porções</h2>
+    <ul>
+      <li>Batata Frita 300g <span class="preco">R$ 18,00</span></li>
+      <li>Batata com Cheddar e Bacon <span class="preco">R$ 24,00</span></li>
+      <li>Frango a Passarinho 400g <span class="preco">R$ 26,00</span></li>
+      <li>Mista (Batata + Frango) <span class="preco">R$ 30,00</span></li>
+    </ul>
+  </section>
 
-      <h5 class="mt-3">🍺 Cervejas</h5>
-      <ul>
-        <li>Lata (Skol, Brahma, Heineken, Itaipava...) <span class="preco">R$ 8,00</span></li>
-        <li>Long Neck <span class="preco">R$ 9,00</span></li>
-        <li>Garrafa 1 L <span class="preco">R$ 14,00</span></li>
-      </ul>
+  <section>
+    <h2>🍢 Espetinhos</h2>
+    <ul>
+      <li>Carne Bovina <span class="preco">R$ 10,00</span></li>
+      <li>Frango <span class="preco">R$ 9,00</span></li>
+      <li>Medalhão de Frango <span class="preco">R$ 12,00</span></li>
+      <li>Linguiça <span class="preco">R$ 9,00</span></li>
+      <li>Kafta <span class="preco">R$ 10,00</span></li>
+    </ul>
+    <p class="text-center mt-2">➡️ Adicional: Farofa + Vinagrete + Pão — <strong>R$ 3,00</strong></p>
+  </section>
 
-      <h5 class="mt-3">🍸 Ice e Especiais</h5>
-      <ul>
-        <li>Smirnoff Ice <span class="preco">R$ 10,00</span></li>
-        <li>Beats <span class="preco">R$ 10,00</span></li>
-      </ul>
-    </section>
+  <section>
+    <h2>🧃 Bebidas</h2>
+    <h5 class="mt-3">🥤 Refrigerantes</h5>
+    <ul>
+      <li>Lata (vários sabores) <span class="preco">R$ 6,00</span></li>
+      <li>1,5 L <span class="preco">R$ 9,00</span></li>
+      <li>2 L <span class="preco">R$ 11,00</span></li>
+    </ul>
 
-    <div class="combo mt-4">
-      💡 <strong>Combos Promocionais</strong><br>
-      2 Pastéis Tradicionais + Refri Lata → <strong>R$ 24,00</strong><br>
-      1 Porção Batata + 2 Espetinhos + Refri 1,5 L → <strong>R$ 39,90</strong>
-    </div>
-  </main>
+    <h5 class="mt-3">🍺 Cervejas</h5>
+    <ul>
+      <li>Lata (Skol, Brahma, Heineken, Itaipava...) <span class="preco">R$ 8,00</span></li>
+      <li>Long Neck <span class="preco">R$ 9,00</span></li>
+      <li>Garrafa 1 L <span class="preco">R$ 14,00</span></li>
+    </ul>
 
-  <footer>
-    <p>© 2025 HelpTech Antunes – Pastel & Bebidas | Jundiaí-SP</p>
-  </footer>
+    <h5 class="mt-3">🍸 Ice e Especiais</h5>
+    <ul>
+      <li>Smirnoff Ice <span class="preco">R$ 10,00</span></li>
+      <li>Beats <span class="preco">R$ 10,00</span></li>
+    </ul>
+  </section>
+
+  <div class="combo mt-4">
+    💡 <strong>Combos Promocionais</strong><br>
+    2 Pastéis Tradicionais + Refri Lata → <strong>R$ 24,00</strong><br>
+    1 Porção Batata + 2 Espetinhos + Refri 1,5 L → <strong>R$ 39,90</strong>
+  </div>
+
+  <!-- Botão de Pedido -->
+  <button class="btn-pedido" id="btnPedido">🛒 Fazer Pedido</button>
+
+</main>
+
+<footer>
+  <p>© 2025 HelpTech Antunes – Pastel & Bebidas | Jundiaí-SP</p>
+</footer>
+
+<!-- SCRIPT SENHA + WHATSAPP -->
+<script>
+  const PHONE = "5511957805217";
+
+  let senha = Number(localStorage.getItem("senhaPedido")) || 1;
+
+  function gerarSenha() {
+    const s = String(senha).padStart(3, "0");
+    senha++;
+    localStorage.setItem("senhaPedido", senha);
+    return s;
+  }
+
+  document.getElementById("btnPedido").addEventListener("click", () => {
+    const senhaGerada = gerarSenha();
+
+    const msg = `
+🍽 *Pedido - HelpTech Antunes*
+🔐 *Senha:* ${senhaGerada}
+
+Olá! Gostaria de fazer um pedido.`;
+
+    const url = "https://wa.me/" + PHONE + "?text=" + encodeURIComponent(msg);
+
+    window.open(url, "_blank");
+
+    alert("Pedido iniciado!\nSua senha é: " + senhaGerada);
+  });
+</script>
 
 </body>
 </html>

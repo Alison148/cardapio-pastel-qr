@@ -81,7 +81,7 @@
       </div>
     </div>
 
-    <!-- Cardápio -->
+    <!-- Cardápio / Itens -->
     <div id="menu-sections" class="row g-3"></div>
 
     <!-- Carrinho -->
@@ -92,10 +92,12 @@
         <h5 class="text-end">Total: <span id="cart-total" class="text-success fw-bold">R$ 0,00</span></h5>
 
         <hr>
+        
         <div class="mb-3">
           <label class="form-label">👤 Nome do Cliente</label>
           <input type="text" id="clientName" class="form-control" placeholder="Digite seu nome...">
         </div>
+
         <div class="mb-3">
           <label class="form-label">📦 Tipo de Pedido</label>
           <select id="orderType" class="form-select">
@@ -103,10 +105,12 @@
             <option>Entrega</option>
           </select>
         </div>
+
         <div class="mb-3">
           <label class="form-label">🏠 Endereço</label>
           <input type="text" id="address" class="form-control" placeholder="Informe o endereço (se entrega)" disabled>
         </div>
+
         <div class="mb-3">
           <label class="form-label">📝 Observações</label>
           <textarea id="notes" class="form-control" rows="2" placeholder="Ex: tirar cebola, bem passado..."></textarea>
@@ -116,6 +120,7 @@
           <button id="checkoutBtn" class="btn btn-success">
             <i class="bi bi-whatsapp"></i> Finalizar no WhatsApp
           </button>
+
           <button id="printBtn" class="btn btn-outline-secondary">
             <i class="bi bi-printer"></i> Imprimir Pedido
           </button>
@@ -124,6 +129,8 @@
     </div>
   </div>
 
+  <!-- Script principal -->
   <script src="script.js"></script>
+
 </body>
 </html>

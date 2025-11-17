@@ -7,6 +7,18 @@ const PHONE_WHATSAPP = "5511957805217"; // número com DDI + DDD
 const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
 // =============================
+// 🔐 SENHA DO PEDIDO
+// =============================
+let pedidoSenha = Number(localStorage.getItem("pedidoSenha")) || 1;
+
+function gerarSenhaPedido() {
+  const senhaFormatada = String(pedidoSenha).padStart(3, "0");
+  pedidoSenha++;
+  localStorage.setItem("pedidoSenha", pedidoSenha);
+  return senhaFormatada;
+}
+
+// =============================
 // 📦 DADOS DO CARDÁPIO
 // =============================
 
@@ -56,14 +68,13 @@ const MENU_ESPETINHOS = [
   { id: 404, name: "Queijo Coalho no Espeto", desc: "Assado na brasa", price: 8, tag: "espetinho" }
 ];
 
-// --- Combos Promocionais ---
+// --- Combos ---
 const MENU_COMBOS = [
   { id: 501, name: "Combo Pastel + Refri", desc: "Qualquer pastel + refri lata", price: 16, tag: "promo" },
   { id: 502, name: "Combo 2 Pasteis + Refri 2L", desc: "2 pasteis + Coca 2L", price: 35, tag: "promo" },
-  { id: 503, name: "Combo Espetinho + Cerveja", desc: "Espetinho à escolha + cerveja lata", price: 15, tag: "promo" }
+  { id: 503, name: "Combo Espetinho + Cerveja", desc: "Espetinho + cerveja", price: 15, tag: "promo" }
 ];
 
-// Junta tudo no menu geral
 const MENU = [
   ...MENU_PASTEIS,
   ...MENU_PASTEIS_DOCES,
@@ -74,7 +85,7 @@ const MENU = [
 ];
 
 // =============================
-// 🧭 VARIÁVEIS E ELEMENTOS
+// 🛒 VARIÁVEIS
 // =============================
 let cart = [];
 const menuContainer = document.getElementById("menu-sections");
@@ -91,7 +102,7 @@ const addressEl = document.getElementById("address");
 const notesEl = document.getElementById("notes");
 
 // =============================
-// 🧾 RENDERIZAÇÃO DO CARDÁPIO
+// HTML DO CARD
 // =============================
 function cardHTML(item) {
   return `
@@ -120,15 +131,13 @@ function renderMenu(list) {
       ${list.map(cardHTML).join("")}
     </div>
   `;
-
-  // Eventos dos botões "Adicionar"
-  menuContainer.querySelectorAll("[data-add]").forEach(btn => {
-    btn.addEventListener("click", () => addToCart(Number(btn.dataset.add)));
-  });
+  menuContainer.querySelectorAll("[data-add]").forEach(btn =>
+    btn.addEventListener("click", () => addToCart(Number(btn.dataset.add)))
+  );
 }
 
 // =============================
-// 🛒 CARRINHO
+// CARRINHO
 // =============================
 function renderCart() {
   cartList.innerHTML = "";
@@ -148,8 +157,7 @@ function renderCart() {
         <button class="btn btn-sm btn-outline-secondary me-2" data-inc="${item.id}">+</button>
         <span class="fw-bold me-2">${BRL.format(item.price * item.qtd)}</span>
         <button class="btn btn-sm btn-danger" data-del="${item.id}">✖</button>
-      </div>
-    `;
+      </div>`;
     cartList.appendChild(li);
   });
 
@@ -160,9 +168,6 @@ function renderCart() {
   cartList.querySelectorAll("[data-dec]").forEach(b => b.addEventListener("click", () => changeQty(Number(b.dataset.dec), -1)));
 }
 
-// =============================
-// 🧮 LÓGICA DO CARRINHO
-// =============================
 function addToCart(id) {
   const item = MENU.find(x => x.id === id);
   if (!item) return;
@@ -186,7 +191,7 @@ function removeFromCart(id) {
 }
 
 // =============================
-// 🔍 FILTROS E BUSCA
+// FILTROS
 // =============================
 function applyFilters() {
   const term = (searchInput.value || "").toLowerCase().trim();
@@ -212,7 +217,7 @@ chips.forEach(ch => ch.addEventListener("click", () => {
 }));
 
 // =============================
-// 🚚 ENDEREÇO DE ENTREGA
+// ENTREGA / RETIRADA
 // =============================
 orderTypeEl.addEventListener("change", () => {
   const entrega = orderTypeEl.value === "Entrega";
@@ -221,23 +226,29 @@ orderTypeEl.addEventListener("change", () => {
 });
 
 // =============================
-// 💬 FINALIZAR PEDIDO (WhatsApp)
+// FINALIZAR PEDIDO (WHATSAPP)
 // =============================
 checkoutBtn.addEventListener("click", () => {
   if (cart.length === 0) return alert("Carrinho vazio!");
 
   const clientName = clientNameEl.value.trim();
-  if (!clientName) return alert("Digite seu nome antes de finalizar o pedido!");
+  if (!clientName) return alert("Digite seu nome!");
 
   const orderType = orderTypeEl.value;
   const address = addressEl.value.trim();
-  if (orderType === "Entrega" && !address) return alert("Informe o endereço para entrega.");
+  if (orderType === "Entrega" && !address) return alert("Informe o endereço!");
 
   const notes = notesEl.value.trim();
 
-  // Montar mensagem WhatsApp
+  // 🔐 GERA SENHA DO PEDIDO
+  const senhaPedido = gerarSenhaPedido();
+
+  // ENVIAR PARA O PAINEL
+  localStorage.setItem("senhaChamada", senhaPedido);
+
   let lines = [];
   lines.push("*Pedido HelpTech Antunes*");
+  lines.push(`🔐 *Senha: ${senhaPedido}*`);
   lines.push(`👤 Cliente: ${clientName}`);
   lines.push(`🧾 Tipo: ${orderType}`);
   if (orderType === "Entrega") lines.push(`📍 Endereço: ${address}`);
@@ -257,13 +268,14 @@ checkoutBtn.addEventListener("click", () => {
 });
 
 // =============================
-// 🖨️ IMPRESSÃO DO PEDIDO
+// IMPRESSÃO
 // =============================
-function buildReceiptHTML({ cliente, tipo, endereco, obs, itens, total }) {
+function buildReceiptHTML({ cliente, tipo, endereco, obs, itens, total, senha }) {
   return `
   <html><head><meta charset="utf-8"><title>Pedido</title></head>
   <body>
     <h2>HelpTech Antunes – Pedido</h2>
+    <p><b>Senha:</b> ${senha}</p>
     <p><b>Cliente:</b> ${cliente}</p>
     <p><b>Tipo:</b> ${tipo}</p>
     ${tipo === "Entrega" ? `<p><b>Endereço:</b> ${endereco}</p>` : ""}
@@ -279,14 +291,32 @@ function buildReceiptHTML({ cliente, tipo, endereco, obs, itens, total }) {
 
 printBtn.addEventListener("click", () => {
   if (cart.length === 0) return alert("Carrinho vazio!");
+
   const clientName = clientNameEl.value.trim();
   if (!clientName) return alert("Digite seu nome!");
   const orderType = orderTypeEl.value;
   const address = addressEl.value.trim();
   if (orderType === "Entrega" && !address) return alert("Informe o endereço!");
   const notes = notesEl.value.trim();
+
   const total = cart.reduce((s, c) => s + c.price * c.qtd, 0);
-  const html = buildReceiptHTML({ cliente: clientName, tipo: orderType, endereco: address, obs: notes, itens: cart, total });
+
+  // 🔐 SENHA NO CUPOM
+  const senhaPedido = gerarSenhaPedido();
+
+  // ENVIAR PARA O PAINEL
+  localStorage.setItem("senhaChamada", senhaPedido);
+
+  const html = buildReceiptHTML({
+    cliente: clientName,
+    tipo: orderType,
+    endereco: address,
+    obs: notes,
+    itens: cart,
+    total,
+    senha: senhaPedido
+  });
+
   const w = window.open("", "_blank");
   w.document.open();
   w.document.write(html);
@@ -294,7 +324,7 @@ printBtn.addEventListener("click", () => {
 });
 
 // =============================
-// 🚀 INICIALIZAÇÃO
+// INICIALIZAÇÃO
 // =============================
 renderMenu(MENU);
 renderCart();

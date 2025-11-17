@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Chamadas – HelpTech Antunes</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #0a0a0a;
+      color: #fff;
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px;
+      background: #198754;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .senha-atual {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 180px;
+      font-weight: 700;
+      color: #00ff85;
+      text-shadow: 0 0 25px #00ff85;
+    }
+
+    .ultima {
+      text-align: center;
+      background: #111;
+      padding: 20px;
+      font-size: 24px;
+      color: #bbb;
+    }
+
+    .historico {
+      background: #141414;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      border-top: 3px solid #198754;
+    }
+
+    .historico .item {
+      background: #222;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #00ff85;
+      box-shadow: 0 0 10px #0f0f0f;
+    }
+  </style>
+</head>
+<body>
+
+<header>📢 Painel de Chamadas – HelpTech Antunes</header>
+
+<div class="senha-atual" id="senhaAtual">---</div>
+
+<div class="ultima" id="ultimaSenha">Nenhuma senha chamada ainda</div>
+
+<div class="historico" id="listaHistorico"></div>
+
+<audio id="somChamada" src="https://assets.mixkit.co/sfx/download/mixkit-hotel-bell-933.wav"></audio>
+
+<script src="painel.js"></script>
+
+</body>
+</html>
+
